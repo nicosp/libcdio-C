@@ -636,13 +636,24 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
 	    goto err_exit;
 	  }
 	if (NULL != (psz_field = strtok_r(NULL, " \t\n\r", &saveptr))) {
-	  /* \todo: set sub-channel-mode */
-#ifdef TODO
+	  /* <sub-channel-mode>: 96 bytes follow each sector in the file */
+	  image_subchannel_t subchannel;
 	  if (0 == strcmp ("RW", psz_field))
-	    ;
+	    subchannel = IMAGE_SUBCHANNEL_RW;
 	  else if (0 == strcmp ("RW_RAW", psz_field))
-	    ;
-#endif
+	    subchannel = IMAGE_SUBCHANNEL_RW_RAW;
+	  else {
+	    cdio_log(log_level, "%s line %d after TRACK:",
+		     psz_cue_name, i_line);
+	    cdio_log(log_level, "'%s' not a valid sub-channel mode.",
+		     psz_field);
+	    goto err_exit;
+	  }
+	  if (NULL != cd) {
+	    cd->tocent[i_track].subchannel = subchannel;
+	    cd->tocent[i_track].endsize   += CDIO_CD_FRAMESIZE_SUB;
+	    cd->tocent[i_track].blocksize += CDIO_CD_FRAMESIZE_SUB;
+	  }
 	}
 	if (NULL != (psz_field = strtok_r(NULL, " \t\n\r", &saveptr))) {
 	  goto format_error;
@@ -1084,7 +1095,7 @@ _read_audio_sectors_cdrdao (void *user_data, void *data, lsn_t lsn,
   int ret;
 
   if (_get_data_track_cdrdao(env, lsn)) {
-    uint8_t buf[CDIO_CD_FRAMESIZE_RAW];
+    uint8_t buf[CDIO_CD_FRAMESIZE_RAW + CDIO_CD_FRAMESIZE_SUB];
     uint8_t *p = data;
     unsigned int i;
 
