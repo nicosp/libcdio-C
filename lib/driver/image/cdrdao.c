@@ -1037,6 +1037,42 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
 }
 
 /**
+   Returns the DATAFILE track that holds lsn, or NULL if there is none.
+   Pregap sectors set with START belong to the track that follows them.
+ */
+static const track_info_t *
+_get_data_track_cdrdao (const _img_private_t *env, lsn_t lsn)
+{
+  const lba_t lba = cdio_lsn_to_lba(lsn);
+  int i;
+
+  for (i = env->gen.i_tracks - 1; i >= 0; i--) {
+    const track_info_t *this_track = &env->tocent[i];
+    if (this_track->data_lba && this_track->data_lba <= lba)
+      return this_track;
+  }
+  return NULL;
+}
+
+/**
+   Reads the whole block of the sector at lsn, blocksize bytes, from
+   this_track's data file into buf.
+ */
+static driver_return_code_t
+_read_block_cdrdao (const track_info_t *this_track, uint8_t *buf, lsn_t lsn)
+{
+  const off_t pos = this_track->offset + (off_t)
+    (cdio_lsn_to_lba(lsn) - this_track->data_lba) * this_track->blocksize;
+
+  if (0 != cdio_stream_seek (this_track->data_source, pos, SEEK_SET))
+    return DRIVER_OP_ERROR;
+  if (this_track->blocksize !=
+      cdio_stream_read (this_track->data_source, buf, this_track->blocksize, 1))
+    return DRIVER_OP_ERROR;
+  return DRIVER_OP_SUCCESS;
+}
+
+/**
    Reads a single audio sector from CD device into data starting
    from lsn. Returns 0 if no error.
  */
@@ -1047,6 +1083,26 @@ _read_audio_sectors_cdrdao (void *user_data, void *data, lsn_t lsn,
   _img_private_t *env = user_data;
   int ret;
 
+  if (_get_data_track_cdrdao(env, lsn)) {
+    uint8_t buf[CDIO_CD_FRAMESIZE_RAW];
+    uint8_t *p = data;
+    unsigned int i;
+
+    for (i = 0; i < nblocks; i++) {
+      const track_info_t *this_track = _get_data_track_cdrdao(env, lsn + i);
+      if (!this_track || this_track->blocksize < CDIO_CD_FRAMESIZE_RAW ||
+	  this_track->blocksize > sizeof(buf))
+	return DRIVER_OP_ERROR;
+      ret = _read_block_cdrdao(this_track, buf, lsn + i);
+      if (ret)
+	return ret;
+      memcpy(p, buf, CDIO_CD_FRAMESIZE_RAW);
+      p += CDIO_CD_FRAMESIZE_RAW;
+    }
+    return DRIVER_OP_SUCCESS;
+  }
+
+  /* FILE and AUDIOFILE tracks */
   ret = cdio_stream_seek (env->tocent[0].data_source,
             lsn * CDIO_CD_FRAMESIZE_RAW, SEEK_SET);
   if (ret!=0) return ret;
