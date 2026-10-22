@@ -717,30 +717,31 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
 	if (0 <= i_track) {
 	  if (NULL != (psz_field = strtok_r(NULL, "\"\t\n\r", &saveptr))) {
 	    /* Handle "<filename>" */
+	    char *psz_dirname = cdio_dirname(psz_cue_name);
+	    char *psz_filename = cdio_abspath(psz_dirname, psz_field);
+	    free(psz_dirname);
 	    if (cd) {
-	      char *psz_dirname = cdio_dirname(psz_cue_name);
-	      char *psz_filename = cdio_abspath(psz_dirname, psz_field);
 	      cd->tocent[i_track].filename = strdup (psz_filename);
-	      free(psz_filename);
-	      free(psz_dirname);
 	      /* To do: do something about reusing existing files. */
-	      if (!(cd->tocent[i_track].data_source = cdio_stdio_new (psz_field))) {
+	      if (!(cd->tocent[i_track].data_source = cdio_stdio_new (psz_filename))) {
 		cdio_log (log_level,
 			  "%s line %d: can't open file `%s' for reading",
 			   psz_cue_name, i_line, psz_field);
+		free(psz_filename);
 		goto err_exit;
 	      }
 	    } else {
-	      CdioDataSource_t *s = cdio_stdio_new (psz_field);
+	      CdioDataSource_t *s = cdio_stdio_new (psz_filename);
 	      if (!s) {
 		cdio_log (log_level,
 			  "%s line %d: can't open file `%s' for reading",
 			  psz_cue_name, i_line, psz_field);
-		cdio_stdio_destroy (s);
+		free(psz_filename);
 		goto err_exit;
 	      }
 	      cdio_stdio_destroy (s);
 	    }
+	    free(psz_filename);
 	  }
 
 	  if (NULL != (psz_field = strtok_r(NULL, " \t\n\r", &saveptr))) {
@@ -798,7 +799,7 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
 	    if (cd) {
 	      cd->tocent[i_track].filename = strdup(psz_filename);
 	      /* To do: do something about reusing existing files. */
-	      if (!(cd->tocent[i_track].data_source = cdio_stdio_new (psz_field))) {
+	      if (!(cd->tocent[i_track].data_source = cdio_stdio_new (psz_filename))) {
 		cdio_log (log_level,
 			  "%s line %d: can't open file `%s' for reading",
 			  psz_cue_name, i_line, psz_field);
