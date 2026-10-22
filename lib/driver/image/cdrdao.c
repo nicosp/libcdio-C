@@ -1126,6 +1126,79 @@ _read_audio_sectors_cdrdao (void *user_data, void *data, lsn_t lsn,
 }
 
 /**
+   Runs a MMC command on the image. Only READ CD of CD-DA user data is
+   emulated, so that mmc_read_cd() returns the sub-channel data of
+   RW_RAW tracks: raw P-W as stored, or formatted Q taken from it.
+   Every other command is unsupported.
+ */
+static driver_return_code_t
+_run_mmc_cmd_cdrdao (void *p_user_data, unsigned int i_timeout_ms,
+		     unsigned int i_cdb, const mmc_cdb_t *p_cdb,
+		     cdio_mmc_direction_t e_direction,
+		     unsigned int i_buf, /*in/out*/ void *p_buf)
+{
+  const _img_private_t *env = p_user_data;
+  const uint8_t *cdb = p_cdb->field;
+  const uint8_t read_sector_type = (cdb[1] >> 2) & 7;
+  const lsn_t lsn = (int32_t) ((uint32_t) cdb[2] << 24 | cdb[3] << 16 |
+			       cdb[4] << 8 | cdb[5]);
+  const unsigned int nblocks = cdb[6] << 16 | cdb[7] << 8 | cdb[8];
+  uint8_t buf[CDIO_CD_FRAMESIZE_RAW + CDIO_CD_FRAMESIZE_SUB];
+  uint8_t *p = p_buf;
+  unsigned int sub_size, i, j;
+
+  (void) i_timeout_ms;
+  (void) i_cdb;
+
+  if (CDIO_MMC_GPCMD_READ_CD != cdb[0] || SCSI_MMC_DATA_READ != e_direction)
+    return DRIVER_OP_UNSUPPORTED;
+
+  /* Any or CD-DA sector type, user data only */
+  if (read_sector_type > 1 || 0x10 != cdb[9])
+    return DRIVER_OP_UNSUPPORTED;
+
+  switch (cdb[10] & 7) {
+  case 0: sub_size = 0; break;
+  case 1: sub_size = CDIO_CD_FRAMESIZE_SUB; break;  /* raw P-W */
+  case 2: sub_size = 16; break;                     /* formatted Q */
+  default: return DRIVER_OP_UNSUPPORTED;
+  }
+
+  if (i_buf < nblocks * (CDIO_CD_FRAMESIZE_RAW + sub_size))
+    return DRIVER_OP_BAD_PARAMETER;
+
+  for (i = 0; i < nblocks; i++) {
+    const track_info_t *this_track = _get_data_track_cdrdao(env, lsn + i);
+    driver_return_code_t ret;
+
+    if (!this_track || TRACK_FORMAT_AUDIO != this_track->track_format ||
+	this_track->blocksize < CDIO_CD_FRAMESIZE_RAW ||
+	this_track->blocksize > sizeof(buf))
+      return DRIVER_OP_ERROR;
+    if (sub_size && IMAGE_SUBCHANNEL_RW_RAW != this_track->subchannel)
+      return DRIVER_OP_UNSUPPORTED;
+
+    ret = _read_block_cdrdao(this_track, buf, lsn + i);
+    if (ret)
+      return ret;
+
+    memcpy(p, buf, CDIO_CD_FRAMESIZE_RAW);
+    p += CDIO_CD_FRAMESIZE_RAW;
+
+    if (CDIO_CD_FRAMESIZE_SUB == sub_size) {
+      memcpy(p, buf + CDIO_CD_FRAMESIZE_RAW, CDIO_CD_FRAMESIZE_SUB);
+    } else if (sub_size) {
+      /* Q is bit 6 of each raw P-W byte */
+      memset(p, 0, sub_size);
+      for (j = 0; j < CDIO_CD_FRAMESIZE_SUB; j++)
+	p[j / 8] |= ((buf[CDIO_CD_FRAMESIZE_RAW + j] >> 6) & 1) << (7 - j % 8);
+    }
+    p += sub_size;
+  }
+  return DRIVER_OP_SUCCESS;
+}
+
+/**
    Reads a single mode2 sector from cd device into data starting
    from lsn. Returns 0 if no error.
  */
@@ -1434,7 +1507,7 @@ cdio_open_cdrdao (const char *psz_cue_name)
   _funcs.read_mode1_sectors    = _read_mode1_sectors_cdrdao;
   _funcs.read_mode2_sector     = _read_mode2_sector_cdrdao;
   _funcs.read_mode2_sectors    = _read_mode2_sectors_cdrdao;
-  _funcs.run_mmc_cmd           = NULL;
+  _funcs.run_mmc_cmd           = _run_mmc_cmd_cdrdao;
   _funcs.set_arg               = _set_arg_image;
   _funcs.set_speed             = cdio_generic_unimplemented_set_speed;
   _funcs.set_blocksize         = cdio_generic_unimplemented_set_blocksize;
