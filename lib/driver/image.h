@@ -78,6 +78,8 @@ typedef struct {
                                      This stuff may have error correction
                                      (EDC, or ECC).*/
   uint16_t       blocksize;     /**< total block size = start + size + end */
+  lba_t          data_lba;      /**< LBA of the sector stored at offset in
+                                     data_source, 0 if unknown */
 } track_info_t;
 
 
