@@ -789,7 +789,7 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
 	  goto not_in_global_section;
 	}
 
-	/* DATAFILE "<filename>" #byte-offset <start-msf> */
+	/* DATAFILE "<filename>" [#byte-offset] [<length>] */
       } else if (0 == strcmp ("DATAFILE", psz_keyword)) {
 	if (0 <= i_track) {
 	  if (NULL != (psz_field = strtok_r(NULL, "\"\t\n\r", &saveptr))) {
@@ -846,37 +846,38 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
 	    }
 	  }
 	  if (psz_field) {
-	    /* Handle start-msf */
+	    /* Handle <length> */
 	    lba_t lba = cdio_mmssff_to_lba (psz_field);
 	    if (CDIO_INVALID_LBA == lba) {
 	      cdio_log(log_level, "%s line %d: invalid MSF string %s",
 		       psz_cue_name, i_line, psz_field);
 	      goto err_exit;
 	    }
-	    if (cd) {
-	      cd->tocent[i_track].start_lba = lba;
-	      cdio_lba_to_msf(cd->tocent[i_track].start_lba,
-			      &(cd->tocent[i_track].start_msf));
-	    }
-	  } else {
-	    /* No start-msf. */
-	    if (cd) {
-	      if (i_track) {
-		uint16_t i_blocksize = cd->tocent[i_track-1].blocksize;
-		off_t i_size      =
-		  cdio_stream_stat(cd->tocent[i_track-1].data_source);
+	    if (cd)
+	      cd->tocent[i_track].sec_count = lba;
+	  }
+	  if (cd) {
+	    /* The track starts where the previous one ends */
+	    if (0 == i_track) {
+	      cd->tocent[i_track].start_lba = CDIO_PREGAP_SECTORS;
+	    } else if (cd->tocent[i_track-1].sec_count) {
+	      cd->tocent[i_track].start_lba = cd->tocent[i_track-1].start_lba +
+		cd->tocent[i_track-1].sec_count;
+	    } else {
+	      /* No length: the previous track takes up the rest of its file */
+	      const track_info_t *prev = &cd->tocent[i_track-1];
+	      uint16_t i_blocksize = prev->blocksize;
+	      off_t i_size = cdio_stream_stat(prev->data_source) - prev->offset;
 
-		  check_track_is_blocksize_multiple(cd->tocent[i_track-1].filename,
-						    i_track-1, i_size, i_blocksize);
-		/* Append size of previous datafile. */
-		cd->tocent[i_track].start_lba = (lba_t) (cd->tocent[i_track-1].start_lba +
-		  (i_size / i_blocksize));
-	      }
-	      cd->tocent[i_track].offset = 0;
-	      cd->tocent[i_track].start_lba += CDIO_PREGAP_SECTORS;
-	      cdio_lba_to_msf(cd->tocent[i_track].start_lba,
-			      &(cd->tocent[i_track].start_msf));
+	      check_track_is_blocksize_multiple(prev->filename,
+						i_track-1, i_size, i_blocksize);
+	      cd->tocent[i_track].start_lba = (lba_t)
+		((prev->data_lba ? prev->data_lba : prev->start_lba) +
+		 (i_size / i_blocksize));
 	    }
+	    cd->tocent[i_track].data_lba = cd->tocent[i_track].start_lba;
+	    cdio_lba_to_msf(cd->tocent[i_track].start_lba,
+			    &(cd->tocent[i_track].start_msf));
 	  }
 
 	} else {
@@ -897,7 +898,9 @@ parse_tocfile (_img_private_t *cd, const char *psz_cue_name)
 	      cd->tocent[i_track].start_lba += cdio_mmssff_to_lba (psz_field);
 	      cdio_lba_to_msf(cd->tocent[i_track].start_lba,
 			      &(cd->tocent[i_track].start_msf));
-	      cd->tocent[i_track].sec_count -= cdio_mmssff_to_lba (psz_field);
+	      /* Unknown lengths stay unknown */
+	      if (cd->tocent[i_track].sec_count)
+		cd->tocent[i_track].sec_count -= cdio_mmssff_to_lba (psz_field);
 	    }
 	  }
 
