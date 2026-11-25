@@ -44,8 +44,6 @@ libiso9660_la_CURRENT = 13
 libiso9660_la_REVISION = 0
 libiso9660_la_AGE = 0
 
-EXTRA_DIST = libiso9660.sym
-
 noinst_HEADERS = iso9660_private.h
 
 lib_LTLIBRARIES = libiso9660.la
@@ -67,7 +65,8 @@ libiso9660_la_LIBADD = @LIBCDIO_LIBS@
 libiso9660_la_ldflags = -version-info $(libiso9660_la_CURRENT):$(libiso9660_la_REVISION):$(libiso9660_la_AGE) @LT_NO_UNDEFINED@
 libiso9660_la_dependencies = $(top_builddir)/lib/driver/libcdio.la
 
-AM_CPPFLAGS = $(LIBCDIO_CFLAGS)
+AM_CPPFLAGS = $(LIBCDIO_CFLAGS) -DCDIO_BUILDING_LIBISO9660
+AM_CFLAGS = $(VISIBILITY_CFLAGS)
 
 ########################################################
 # Things to version the symbols in the libraries
@@ -132,13 +131,8 @@ if BUILD_VERSIONED_LIBS
 libiso9660_la_LDFLAGS = $(libiso9660_la_ldflags) -Wl,--version-script=libiso9660.la.ver
 libiso9660_la_DEPENDENCIES = $(libcdio9660_la_dependencies) libiso9660.la.ver
 
-libiso9660.la.ver: $(srcdir)/libiso9660.sym
-	@echo 'ISO9660_$(libiso9660_la_MAJOR) {' > $@
-	@echo '  global:' >> $@
-	@sed 's/^/    /;s/$$/;/' $< >> $@
-	@echo '  local:' >> $@
-	@echo '    *;' >> $@
-	@echo '};' >> $@
+libiso9660.la.ver: Makefile
+	@echo 'ISO9660_$(libiso9660_la_MAJOR) { global: *; };' > $@
 
 MOSTLYCLEANFILES = libiso9660.la.ver
 else

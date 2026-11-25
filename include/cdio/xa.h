@@ -33,6 +33,8 @@
 #ifndef CDIO_XA_H_
 #define CDIO_XA_H_
 
+#include <cdio/export.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -115,7 +117,7 @@ typedef struct iso9660_xa_s
   /**
     Returns POSIX mode bitstring for a given file.
   */
-  posix_mode_t iso9660_get_posix_filemode_from_xa(uint16_t i_perms);
+  ISO9660_PUBLIC posix_mode_t iso9660_get_posix_filemode_from_xa(uint16_t i_perms);
 
 /**
   Returns a string interpreting the extended attribute xa_attr.
@@ -145,7 +147,7 @@ typedef struct iso9660_xa_s
   The second character of a pair (7, 9, 11) is "r" if the entry is allowed
   to be read.
 */
-const char *
+ISO9660_PUBLIC const char *
 iso9660_get_xa_attr_str (uint16_t xa_attr);
 
 /**
@@ -154,7 +156,7 @@ iso9660_get_xa_attr_str (uint16_t xa_attr);
 
   @see iso9660_xa
 */
-iso9660_xa_t *
+ISO9660_PUBLIC iso9660_xa_t *
 iso9660_xa_init (iso9660_xa_t *_xa, uint16_t uid, uint16_t gid, uint16_t attr,
                  uint8_t filenum);
 
@@ -163,7 +165,7 @@ iso9660_xa_init (iso9660_xa_t *_xa, uint16_t uid, uint16_t gid, uint16_t attr,
 
   @see iso9660_xa
 */
-void
+ISO9660_PUBLIC void
 iso9660_xa_free (iso9660_xa_t *_xa);
 
 #ifdef __cplusplus

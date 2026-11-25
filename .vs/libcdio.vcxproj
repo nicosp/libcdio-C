@@ -88,7 +88,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;HAVE_CONFIG_H;_CONSOLE;_MBCS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;HAVE_CONFIG_H;CDIO_STATIC;_CONSOLE;_MBCS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <DisableSpecificWarnings>4018;4133;4333;4996;28159</DisableSpecificWarnings>
     </ClCompile>
@@ -100,7 +100,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;HAVE_CONFIG_H;_CONSOLE;_MBCS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;HAVE_CONFIG_H;CDIO_STATIC;_CONSOLE;_MBCS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <DisableSpecificWarnings>4018;4133;4333;4996;28159</DisableSpecificWarnings>
     </ClCompile>
@@ -112,7 +112,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='XBOX_Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;CDIO_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -131,7 +131,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='XBOX_Release|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;CDIO_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -150,7 +150,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <DisableSpecificWarnings>4018;4133;4333;4996;28159</DisableSpecificWarnings>
-      <PreprocessorDefinitions>WIN32;HAVE_CONFIG_H;_CONSOLE;_MBCS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;HAVE_CONFIG_H;CDIO_STATIC;_CONSOLE;_MBCS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <PreBuildEvent>
@@ -161,7 +161,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <DisableSpecificWarnings>4018;4133;4333;4996;28159</DisableSpecificWarnings>
-      <PreprocessorDefinitions>WIN32;HAVE_CONFIG_H;_CONSOLE;_MBCS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;HAVE_CONFIG_H;CDIO_STATIC;_CONSOLE;_MBCS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <PreBuildEvent>

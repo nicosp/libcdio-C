@@ -15,6 +15,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <cdio/export.h>
 #include <cdio/mmc.h>
 
 /** Convert milliseconds to seconds taking the ceiling value, i.e.
@@ -38,7 +39,7 @@ msecs2secs(unsigned int msecs)
   @param p_user_data the CD object to be acted upon.
 
 */
-driver_return_code_t
+CDIO_PRIVATE driver_return_code_t
 audio_read_subchannel_mmc ( void *p_user_data,
 			    cdio_subchannel_t *p_subchannel);
 
@@ -46,26 +47,26 @@ audio_read_subchannel_mmc ( void *p_user_data,
   Get the block size for subsequent read requests, via a SCSI MMC
   MODE_SENSE 6 command.
 */
-int get_blocksize_mmc (void *p_user_data);
+CDIO_PRIVATE int get_blocksize_mmc (void *p_user_data);
 
 /**
   Get the lsn of the end of the CD
 
   @return the lsn. On error return CDIO_INVALID_LSN.
 */
-lsn_t get_disc_last_lsn_mmc( void *p_user_data );
+CDIO_PRIVATE lsn_t get_disc_last_lsn_mmc( void *p_user_data );
 
-void get_drive_cap_mmc (const void *p_user_data,
+CDIO_PRIVATE void get_drive_cap_mmc (const void *p_user_data,
 			/*out*/ cdio_drive_read_cap_t  *p_read_cap,
 			/*out*/ cdio_drive_write_cap_t *p_write_cap,
 			/*out*/ cdio_drive_misc_cap_t  *p_misc_cap);
 
-int get_media_changed_mmc (const void *p_user_data);
+CDIO_PRIVATE int get_media_changed_mmc (const void *p_user_data);
 
-char *get_mcn_mmc (const void *p_user_data);
+CDIO_PRIVATE char *get_mcn_mmc (const void *p_user_data);
 char *get_track_isrc_mmc (const void *p_user_data, track_t i_track);
 
-driver_return_code_t get_tray_status (const void *p_user_data);
+CDIO_PRIVATE driver_return_code_t get_tray_status (const void *p_user_data);
 
 /** Read just the user data part of some sort of data sector (via
     mmc_read_cd).
@@ -85,21 +86,21 @@ driver_return_code_t get_tray_status (const void *p_user_data);
     M2RAW_SECTOR_SIZE, or M2F2_SECTOR_SIZE. See comment above under p_buf.
 
 */
-driver_return_code_t read_data_sectors_mmc ( void *p_user_data,
+CDIO_PRIVATE driver_return_code_t read_data_sectors_mmc ( void *p_user_data,
 					     void *p_buf,  lsn_t i_lsn,
 					     uint16_t i_blocksize,
 					     uint32_t i_blocks );
-char *get_mcn_mmc (const void *p_user_data);
+CDIO_PRIVATE char *get_mcn_mmc (const void *p_user_data);
 
 /* Set read blocksize (via MMC) */
-driver_return_code_t set_blocksize_mmc (void *p_user_data,
+CDIO_PRIVATE driver_return_code_t set_blocksize_mmc (void *p_user_data,
 					uint16_t i_blocksize);
 
 /* Set the drive speed in CD-ROM speed units (via MMC). */
-driver_return_code_t set_drive_speed_mmc (void *p_user_data, int i_speed);
+CDIO_PRIVATE driver_return_code_t set_drive_speed_mmc (void *p_user_data, int i_speed);
 
 /* Set CD-ROM drive speed  in K bytes per second. (via MMC) */
-driver_return_code_t set_speed_mmc (void *p_user_data, int i_Kbs_speed);
+CDIO_PRIVATE driver_return_code_t set_speed_mmc (void *p_user_data, int i_Kbs_speed);
 
 /***********************************************************
   Miscellaenous other "private" routines. Probably need
@@ -121,7 +122,7 @@ int mmc_set_blocksize_mmc_private ( const void *p_env, const
 /**
   Get the DVD type associated with cd object.
 */
-discmode_t
+CDIO_PRIVATE discmode_t
 mmc_get_dvd_struct_physical_private ( void *p_env,
 				      mmc_run_cmd_fn_t run_mmc_cmd,
 				      cdio_dvd_struct_t *s );
@@ -131,12 +132,12 @@ mmc_get_dvd_struct_physical_private ( void *p_env,
   in p. We interpret this and return a bit mask set according to the
   capabilities.
  */
-void mmc_get_drive_cap_buf(const uint8_t *p,
+CDIO_PRIVATE void mmc_get_drive_cap_buf(const uint8_t *p,
 			   /*out*/ cdio_drive_read_cap_t  *p_read_cap,
 			   /*out*/ cdio_drive_write_cap_t *p_write_cap,
 			   /*out*/ cdio_drive_misc_cap_t  *p_misc_cap);
 
-driver_return_code_t
+CDIO_PRIVATE driver_return_code_t
 mmc_set_blocksize_private ( void *p_env,
 			    const mmc_run_cmd_fn_t run_mmc_cmd,
 			    uint16_t i_blocksize);
@@ -147,7 +148,7 @@ mmc_set_blocksize_private ( void *p_env,
   Note: string is malloc'd so caller should free() then returned
   string when done with it.
  */
-char *
+CDIO_PRIVATE char *
 mmc_get_mcn_isrc_private ( const CdIo_t *p_cdio,
                             track_t i_track,
                             unsigned char sub_chan_param

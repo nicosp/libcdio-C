@@ -59,6 +59,8 @@
 #ifndef CDIO_SECTOR_H_
 #define CDIO_SECTOR_H_
 
+#include <cdio/export.h>
+
 #ifdef __cplusplus
     extern "C" {
 #endif
@@ -132,7 +134,7 @@
         place I came across such useful stuff.
       */
 #define CDIO_CD_MINS              74   /**< max. minutes per CD, not really
-                                          a limit */
+                                          CDIO_PUBLIC a limit */
 #define CDIO_CD_SECS_PER_MIN      60   /**< seconds per minute */
 #define CDIO_CD_FRAMES_PER_SEC    75   /**< frames per second */
 #define CDIO_CD_SYNC_SIZE         12   /**< 12 sync bytes per raw data frame */
@@ -167,7 +169,7 @@
 
       /** String of bytes used to identify the beginning of a Mode 1 or
           Mode 2 sector. */
-      extern const uint8_t CDIO_SECTOR_SYNC_HEADER[CDIO_CD_SYNC_SIZE];
+      CDIO_PUBLIC extern const uint8_t CDIO_SECTOR_SYNC_HEADER[CDIO_CD_SYNC_SIZE];
       /**<
         {0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0};
       */
@@ -215,45 +217,45 @@ typedef enum cdio_cd_minutes_sectors
       /**
         Convert an LBA into a string representation of the MSF.
         \warning cdio_lba_to_msf_str returns new allocated string */
-      char *cdio_lba_to_msf_str (lba_t i_lba);
+      CDIO_PUBLIC char *cdio_lba_to_msf_str (lba_t i_lba);
 
       /**
         Convert an MSF into a string representation of the MSF.
         \warning cdio_msf_to_msf_str returns new allocated string */
-      char *cdio_msf_to_str (const msf_t *p_msf);
+      CDIO_PUBLIC char *cdio_msf_to_str (const msf_t *p_msf);
 
       /**
         Convert an LBA into the corresponding LSN.
       */
-      lba_t cdio_lba_to_lsn (lba_t i_lba);
+      CDIO_PUBLIC lba_t cdio_lba_to_lsn (lba_t i_lba);
 
       /**
         Convert an LBA into the corresponding MSF.
       */
-      void  cdio_lba_to_msf(lba_t i_lba, msf_t *p_msf);
+      CDIO_PUBLIC void  cdio_lba_to_msf(lba_t i_lba, msf_t *p_msf);
 
       /**
         Convert an LSN into the corresponding LBA.
         CDIO_INVALID_LBA is returned if there is an error.
       */
-      lba_t cdio_lsn_to_lba (lsn_t i_lsn);
+      CDIO_PUBLIC lba_t cdio_lsn_to_lba (lsn_t i_lsn);
 
       /**
         Convert an LSN into the corresponding MSF.
       */
-      void  cdio_lsn_to_msf (lsn_t i_lsn, msf_t *p_msf);
+      CDIO_PUBLIC void  cdio_lsn_to_msf (lsn_t i_lsn, msf_t *p_msf);
 
       /**
         Convert a MSF into the corresponding LBA.
         CDIO_INVALID_LBA is returned if there is an error.
       */
-      lba_t cdio_msf_to_lba (const msf_t *p_msf);
+      CDIO_PUBLIC lba_t cdio_msf_to_lba (const msf_t *p_msf);
 
       /**
         Convert a MSF into the corresponding LSN.
         CDIO_INVALID_LSN is returned if there is an error.
       */
-      lsn_t cdio_msf_to_lsn (const msf_t *p_msf);
+      CDIO_PUBLIC lsn_t cdio_msf_to_lsn (const msf_t *p_msf);
 
       /**
         Convert a MSF - broken out as 3 integer components into the

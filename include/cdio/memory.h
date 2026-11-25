@@ -25,6 +25,8 @@
 #ifndef CDIO_MEMORY_H_
 #define CDIO_MEMORY_H_
 
+#include <cdio/export.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -32,7 +34,7 @@ extern "C" {
   /**
     Free the passed pointer.
   */
-  void cdio_free(void *p_memory);
+  CDIO_PUBLIC void cdio_free(void *p_memory);
 
 #ifdef __cplusplus
 }

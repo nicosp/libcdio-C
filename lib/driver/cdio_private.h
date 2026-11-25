@@ -22,6 +22,8 @@
 #ifndef CDIO_DRIVER_PRIVATE_H_
 #define CDIO_DRIVER_PRIVATE_H_
 
+#include <cdio/export.h>
+
 #if defined(HAVE_CONFIG_H) && !defined(LIBCDIO_CONFIG_H)
 # include "config.h"
 #endif
@@ -64,14 +66,14 @@ static inline char *libcdio_strndup(const char *s, size_t n)
 
     Callers must free return value after use.
    */
-  extern char *cdio_dirname(const char *fname);
+  CDIO_PUBLIC extern char *cdio_dirname(const char *fname);
 
   /**
     Construct an absolute file name from path and file name.
 
     Callers must free return value after use.
    */
-  extern char *cdio_abspath(const char *cwd, const char *fname);
+  CDIO_PUBLIC extern char *cdio_abspath(const char *cwd, const char *fname);
 
   /* Opaque type */
   typedef struct _CdioDataSource CdioDataSource_t;
@@ -516,7 +518,7 @@ extern "C" {
     lba_t   lba;              /* Current LBA */
   } internal_position_t;
 
-  CdIo_t * cdio_new (generic_img_private_t *p_env, cdio_funcs_t *p_funcs);
+  CDIO_PRIVATE CdIo_t * cdio_new (generic_img_private_t *p_env, cdio_funcs_t *p_funcs);
 
   /* The below structure describes a specific CD Input driver  */
   typedef struct
@@ -537,36 +539,36 @@ extern "C" {
 
   /* The below array gives of the drivers that are currently available for
      on a particular host. */
-  extern CdIo_driver_t CdIo_driver[];
+  CDIO_PRIVATE extern CdIo_driver_t CdIo_driver[];
 
   /* The last valid entry of Cdio_driver. -1 means uninitialized. -2
      means some sort of error.
    */
-  extern int CdIo_last_driver;
+  CDIO_PRIVATE extern int CdIo_last_driver;
 
   /* The below array gives all drivers that can possibly appear.
      on a particular host. */
-  extern CdIo_driver_t CdIo_all_drivers[];
+  CDIO_PRIVATE extern CdIo_driver_t CdIo_all_drivers[];
 
   /**
     Add/allocate a drive to the end of drives.
     Use cdio_free_device_list() to free this device_list.
   */
-  void cdio_add_device_list(char **device_list[], const char *psz_drive,
+  CDIO_PRIVATE void cdio_add_device_list(char **device_list[], const char *psz_drive,
                             unsigned int *i_drives);
 
   driver_return_code_t close_tray_bsdi    (const char *psz_drive);
-  driver_return_code_t close_tray_freebsd (const char *psz_drive);
-  driver_return_code_t close_tray_linux   (const char *psz_drive);
-  driver_return_code_t close_tray_netbsd  (const char *psz_drive);
-  driver_return_code_t close_tray_osx     (const char *psz_drive);
-  driver_return_code_t close_tray_solaris (const char *psz_drive);
-  driver_return_code_t close_tray_win32   (const char *psz_drive);
+  CDIO_PRIVATE driver_return_code_t close_tray_freebsd (const char *psz_drive);
+  CDIO_PRIVATE driver_return_code_t close_tray_linux   (const char *psz_drive);
+  CDIO_PRIVATE driver_return_code_t close_tray_netbsd  (const char *psz_drive);
+  CDIO_PRIVATE driver_return_code_t close_tray_osx     (const char *psz_drive);
+  CDIO_PRIVATE driver_return_code_t close_tray_solaris (const char *psz_drive);
+  CDIO_PRIVATE driver_return_code_t close_tray_win32   (const char *psz_drive);
 
-  bool cdio_have_netbsd(void);
-  CdIo_t * cdio_open_netbsd (const char *psz_source);
-  char * cdio_get_default_device_netbsd(void);
-  char **cdio_get_devices_netbsd(void);
+  CDIO_PUBLIC bool cdio_have_netbsd(void);
+  CDIO_PUBLIC CdIo_t * cdio_open_netbsd (const char *psz_source);
+  CDIO_PRIVATE char * cdio_get_default_device_netbsd(void);
+  CDIO_PRIVATE char **cdio_get_devices_netbsd(void);
   /** Set up CD-ROM for reading using the NetBSD driver. The device_name is
       the some sort of device name.
 
@@ -574,12 +576,12 @@ extern "C" {
 
      @see cdio_open_cd, cdio_open
    */
-  CdIo_t * cdio_open_am_netbsd (const char *psz_source,
+  CDIO_PUBLIC CdIo_t * cdio_open_am_netbsd (const char *psz_source,
                                 const char *psz_access_mode);
 
   /** DEPRECATED: use cdio_have_driver().
     True if AIX driver is available. */
-  bool cdio_have_aix    (void);
+  CDIO_PRIVATE bool cdio_have_aix    (void);
 
   /** DEPRECATED: use cdio_have_driver().
     True if BSDI driver is available. */
@@ -587,15 +589,15 @@ extern "C" {
 
   /** DEPRECATED: use cdio_have_driver().
     True if FreeBSD driver is available. */
-  bool cdio_have_freebsd (void);
+  CDIO_PUBLIC bool cdio_have_freebsd (void);
 
   /** DEPRECATED: use cdio_have_driver().
     True if GNU/Linux driver is available. */
-  bool cdio_have_linux   (void);
+  CDIO_PUBLIC bool cdio_have_linux   (void);
 
   /** DEPRECATED: use cdio_have_driver().
     True if Sun Solaris driver is available. */
-  bool cdio_have_solaris (void);
+  CDIO_PUBLIC bool cdio_have_solaris (void);
 
   /** DEPRECATED: use cdio_have_driver().
     True if IBM OS2 driver is available. */
@@ -603,20 +605,20 @@ extern "C" {
 
   /** DEPRECATED: use cdio_have_driver().
     True if Apple OSX driver is available. */
-  bool cdio_have_osx     (void);
+  CDIO_PUBLIC bool cdio_have_osx     (void);
 
   /** DEPRECATED: use cdio_have_driver().
     True if Microsoft Windows driver is available. */
-  bool cdio_have_win32   (void);
+  CDIO_PUBLIC bool cdio_have_win32   (void);
 
   /** True if Nero driver is available. */
-  bool cdio_have_nrg     (void);
+  CDIO_PUBLIC bool cdio_have_nrg     (void);
 
   /** True if BIN/CUE driver is available. */
-  bool cdio_have_bincue  (void);
+  CDIO_PUBLIC bool cdio_have_bincue  (void);
 
   /** True if cdrdao CDRDAO driver is available. */
-  bool cdio_have_cdrdao  (void);
+  CDIO_PUBLIC bool cdio_have_cdrdao  (void);
 
 #ifdef __cplusplus
 }

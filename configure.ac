@@ -160,6 +160,24 @@ else
 fi
 CFLAGS="$CFLAGS $WARN_CFLAGS"
 
+dnl The libraries export only what <cdio/export.h> marks.  On Windows
+dnl that is done with __declspec(dllexport); elsewhere compile them with
+dnl -fvisibility=hidden so nothing unmarked is exported.
+VISIBILITY_CFLAGS=''
+case $host_os in
+  mingw*|cygwin*) ;;
+  *)
+    SAVE_CFLAGS="$CFLAGS"
+    CFLAGS="$CFLAGS -fvisibility=hidden -Werror"
+    AC_MSG_CHECKING([whether $CC understands -fvisibility=hidden])
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[]])],
+      [VISIBILITY_CFLAGS='-fvisibility=hidden'; AC_MSG_RESULT(yes)],
+      [AC_MSG_RESULT(no)])
+    CFLAGS="$SAVE_CFLAGS"
+    ;;
+esac
+AC_SUBST(VISIBILITY_CFLAGS)
+
 # We use Perl for documentation and regression tests
 AC_PATH_PROG(PERL, perl, false)
 AC_SUBST(PERL)

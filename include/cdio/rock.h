@@ -29,6 +29,8 @@
 #ifndef CDIO_ROCK_H_
 #define CDIO_ROCK_H_
 
+#include <cdio/export.h>
+
 #include <cdio/types.h>
 
 #ifdef __cplusplus
@@ -40,7 +42,7 @@ extern "C" {
   be helpful in debuggers where wants just to refer to the ISO_ROCK_*
   names and get something.
 */
-extern enum iso_rock_enums {
+ISO9660_PUBLIC extern enum iso_rock_enums {
   ISO_ROCK_IRUSR  = 000400,   /**< read permission (owner) */
   ISO_ROCK_IWUSR  = 000200,   /**< write permission (owner) */
   ISO_ROCK_IXUSR  = 000100,   /**< execute permission (owner) */
@@ -348,7 +350,7 @@ int parse_rock_ridge_stat(iso9660_dir_t *de,
   /**
     Returns POSIX mode bitstring for a given file.
   */
-  mode_t
+  ISO9660_PUBLIC mode_t
   iso9660_get_posix_filemode_from_rock(const iso_rock_statbuf_t *rr);
 
 /**
@@ -384,15 +386,15 @@ int parse_rock_ridge_stat(iso9660_dir_t *de,
   group/user is set "S" indicates this. If none of these properties
   holds the "-" indicates this.
 */
-const char *iso9660_get_rock_attr_str(posix_mode_t st_mode);
+ISO9660_PUBLIC const char *iso9660_get_rock_attr_str(posix_mode_t st_mode);
 
 /** These variables are not used, but are defined to facilatate debugging
     by letting us use enumerations values (which also correspond to
     \#define's inside a debugged program.
  */
-extern iso_rock_nm_flag_t iso_rock_nm_flag;
-extern iso_rock_sl_flag_t iso_rock_sl_flag;
-extern iso_rock_tf_flag_t iso_rock_tf_flag;
+ISO9660_PUBLIC extern iso_rock_nm_flag_t iso_rock_nm_flag;
+ISO9660_PUBLIC extern iso_rock_sl_flag_t iso_rock_sl_flag;
+ISO9660_PUBLIC extern iso_rock_tf_flag_t iso_rock_tf_flag;
 
 #ifdef __cplusplus
 }

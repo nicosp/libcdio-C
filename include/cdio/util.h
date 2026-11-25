@@ -20,6 +20,8 @@
 #ifndef CDIO_UTIL_H_
 #define CDIO_UTIL_H_
 
+#include <cdio/export.h>
+
 /**
    \file util.h
    \brief Miscellaneous utility functions.
@@ -112,21 +114,21 @@ _cdio_strdup_upper (const char str[]);
 char *
 _cdio_strdup_fixpath (const char path[]);
 
-void
+CDIO_PUBLIC void
 _cdio_strfreev(char **strv);
 
 size_t
 _cdio_strlenv(char **str_array);
 
-char **
+CDIO_PUBLIC char **
 _cdio_strsplit(const char str[], char delim);
 
-uint8_t cdio_to_bcd8(uint8_t n);
-uint8_t cdio_from_bcd8(uint8_t p);
+CDIO_PUBLIC uint8_t cdio_to_bcd8(uint8_t n);
+CDIO_PUBLIC uint8_t cdio_from_bcd8(uint8_t p);
 
 /**  cdio_realpath() same as POSIX.1-2001 realpath if that's
 around. If not we do poor-man's simulation of that behavior.  */
-char *cdio_realpath (const char *psz_src, char *psz_dst);
+CDIO_PUBLIC char *cdio_realpath (const char *psz_src, char *psz_dst);
 
 #ifdef WANT_FOLLOW_SYMLINK_COMPATIBILITY
 # define cdio_follow_symlink cdio_realpath

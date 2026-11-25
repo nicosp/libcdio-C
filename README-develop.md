@@ -55,9 +55,19 @@ Tests are grouped into the suites `lib`, `driver`, `example` and
 is installed.
 
 With Microsoft's compiler, run the same commands from a Visual Studio
-developer prompt. The libraries are built static, since libcdio marks
-no symbols for export from a DLL. To link the C runtime statically as
+developer prompt. libcdio, libiso9660 and libudf are built as DLLs; the
+C++ bindings stay static. To link the C runtime statically as
 libcdio.sln does, add `-Db_vscrt=static_from_buildtype`.
+
+## Exported symbols
+
+Each library exports exactly the declarations its public headers mark
+with `CDIO_PUBLIC`, `ISO9660_PUBLIC` or `UDF_PUBLIC` (see
+`include/cdio/export.h`); everything else stays inside the library.
+When you add a function or variable to the API, put the right macro in
+front of its declaration. Functions only one library uses can be marked
+`CDIO_PRIVATE` in its private header. Programs that link the static
+libraries on Windows must define `CDIO_STATIC`.
 
 When you add a source file, test or configure check, add it to the
 `meson.build` files as well as to the Makefile.am files and configure.ac.

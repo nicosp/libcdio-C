@@ -26,6 +26,8 @@
 #ifndef CDIO_CD_TYPES_H_
 #define CDIO_CD_TYPES_H_
 
+#include <cdio/export.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -143,7 +145,7 @@ typedef struct {
  *  have at track track_num. Return information about the CD image
  *  is returned in iso_analysis and the return value.
  */
-cdio_fs_anal_t cdio_guess_cd_type(const CdIo_t *cdio, int start_session,
+CDIO_PUBLIC cdio_fs_anal_t cdio_guess_cd_type(const CdIo_t *cdio, int start_session,
                                   track_t track_num,
                                   /*out*/ cdio_iso_analysis_t *iso_analysis);
 

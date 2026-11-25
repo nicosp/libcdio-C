@@ -43,7 +43,7 @@ testisocd2_LDADD      = $(LIBISO9660_LIBS) $(LIBCDIO_LIBS) $(LTLIBICONV)
 testisocd_joliet_LDADD= $(LIBISO9660_LIBS) $(LIBCDIO_LIBS) $(LTLIBICONV)
 testisorr_LDADD       = $(LIBISO9660_LIBS) $(LIBCDIO_LIBS) $(LTLIBICONV)
 testisorr_ce_SOURCES  = testisorr_ce.c $(top_srcdir)/lib/iso9660/rock.c
-testisorr_ce_CPPFLAGS = $(AM_CPPFLAGS) -I$(top_srcdir)/lib/driver
+testisorr_ce_CPPFLAGS = $(AM_CPPFLAGS) -I$(top_srcdir)/lib/driver -DCDIO_BUILDING_LIBISO9660
 testisorr_ce_LDADD    = $(LIBCDIO_LIBS) $(LTLIBICONV)
 
 testudf_LDADD         = $(LIBUDF_LIBS) $(LIBCDIO_LIBS) $(LTLIBICONV)

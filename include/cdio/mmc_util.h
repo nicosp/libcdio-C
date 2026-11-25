@@ -25,6 +25,8 @@
 #ifndef CDIO_MMC_UTIL_H_
 #define CDIO_MMC_UTIL_H_
 
+#include <cdio/export.h>
+
 #include <cdio/device.h>
 
 #ifdef __cplusplus
@@ -91,7 +93,7 @@ extern "C" {
        @param i_feature MMC feature number
        @return string containing the name of the given feature
     */
-    const char *mmc_feature2str( int i_feature );
+    CDIO_PUBLIC const char *mmc_feature2str( int i_feature );
     
     /**
        Get drive capabilities for a device.
@@ -109,13 +111,13 @@ extern "C" {
     /**
        Return a string containing the name of the given feature
     */
-    const char *mmc_feature_profile2str( int i_feature_profile );
+    CDIO_PUBLIC const char *mmc_feature_profile2str( int i_feature_profile );
 
-    bool mmc_is_disctype_bd(cdio_mmc_feature_profile_t disctype);
-    bool mmc_is_disctype_cdrom(cdio_mmc_feature_profile_t disctype);
-    bool mmc_is_disctype_dvd(cdio_mmc_feature_profile_t disctype);
-    bool mmc_is_disctype_hd_dvd (cdio_mmc_feature_profile_t disctype);
-    bool mmc_is_disctype_overwritable (cdio_mmc_feature_profile_t disctype);
+    CDIO_PUBLIC bool mmc_is_disctype_bd(cdio_mmc_feature_profile_t disctype);
+    CDIO_PUBLIC bool mmc_is_disctype_cdrom(cdio_mmc_feature_profile_t disctype);
+    CDIO_PUBLIC bool mmc_is_disctype_dvd(cdio_mmc_feature_profile_t disctype);
+    CDIO_PUBLIC bool mmc_is_disctype_hd_dvd (cdio_mmc_feature_profile_t disctype);
+    CDIO_PUBLIC bool mmc_is_disctype_overwritable (cdio_mmc_feature_profile_t disctype);
     bool mmc_is_disctype_rewritable(cdio_mmc_feature_profile_t disctype);
     
     /** The default read timeout is 3 minutes. */
@@ -125,12 +127,12 @@ extern "C" {
        Set this to the maximum value in milliseconds that we will
        wait on an MMC read command.  
     */
-    extern uint32_t mmc_read_timeout_ms;
+    CDIO_PUBLIC extern uint32_t mmc_read_timeout_ms;
     
     /**
        Maps a mmc_sense_key_t into a string name.
     */
-    extern const char mmc_sense_key2str[16][40];
+    CDIO_PUBLIC extern const char mmc_sense_key2str[16][40];
 
     /**
        The default timeout (non-read) is 6 seconds. 
@@ -141,7 +143,7 @@ extern "C" {
        Set this to the maximum value in milliseconds that we will
        wait on an MMC command.  
     */
-    extern uint32_t mmc_timeout_ms; 
+    CDIO_PUBLIC extern uint32_t mmc_timeout_ms; 
 
 #ifdef __cplusplus
 }

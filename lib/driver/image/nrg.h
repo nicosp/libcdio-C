@@ -1,3 +1,4 @@
+#include <cdio/export.h>
 /*
   $Id: nrg.h,v 1.7 2008/06/10 00:45:08 pjcreath Exp $
 
@@ -150,6 +151,6 @@ typedef enum {
     allow one to refer to the enumeration value names in the typedefs
     above in a debugger and debugger expressions.
 */
-extern nero_id_t    nero_id;
-extern nero_dtype_t nero_dtype;
+CDIO_PRIVATE extern nero_id_t    nero_id;
+CDIO_PRIVATE extern nero_dtype_t nero_dtype;
   

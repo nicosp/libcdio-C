@@ -14,10 +14,7 @@ if enable_versioned_libs
   libiso9660_ver = configure_file(
     input: version_script_template,
     output: 'libiso9660.ver',
-    configuration: {
-      'NAME': 'ISO9660_@0@'.format(libiso9660_major),
-      'SYMBOLS': '    ' + ';\n    '.join(fs.read('libiso9660.sym').strip().split('\n')) + ';',
-    })
+    configuration: {'NAME': 'ISO9660_@0@'.format(libiso9660_major)})
   libiso9660_link_args += '-Wl,--version-script,' + meson.current_build_dir() / 'libiso9660.ver'
   libiso9660_link_depends += libiso9660_ver
 endif
@@ -29,6 +26,7 @@ libiso9660 = build_target('iso9660',
                                 libiso9660_revision),
   soversion: libiso9660_major,
   include_directories: top_inc,
+  c_args: lib_visibility_args + ['-DCDIO_BUILDING_LIBISO9660'],
   link_args: libiso9660_link_args,
   link_depends: libiso9660_link_depends,
   dependencies: libcdio_dep,
@@ -46,5 +44,6 @@ pkg.generate(libiso9660,
   name: 'libiso9660',
   description: 'ISO-9660 library of libcdio',
   filebase: 'libiso9660',
+  extra_cflags: cdio_static_args,
   requires: 'libcdio',
 )

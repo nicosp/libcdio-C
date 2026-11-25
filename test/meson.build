@@ -38,8 +38,10 @@ test_programs = {
 }
 
 foreach name, p : test_programs
+  # testisorr_ce compiles lib/iso9660/rock.c into itself, so it defines
+  # rock.c's ISO9660_PUBLIC functions rather than importing them.
   exe = executable(name, name + '.c', p[1],
-    c_args: test_c_args,
+    c_args: test_c_args + (name == 'testisorr_ce' ? ['-DCDIO_BUILDING_LIBISO9660'] : []),
     include_directories: test_inc + p[2],
     dependencies: p[0],
   )

@@ -51,10 +51,7 @@ if enable_versioned_libs
   libcdio_ver = configure_file(
     input: version_script_template,
     output: 'libcdio.ver',
-    configuration: {
-      'NAME': 'CDIO_@0@'.format(libcdio_major),
-      'SYMBOLS': '    ' + ';\n    '.join(fs.read('libcdio.sym').strip().split('\n')) + ';',
-    })
+    configuration: {'NAME': 'CDIO_@0@'.format(libcdio_major)})
   libcdio_link_args += '-Wl,--version-script,' + meson.current_build_dir() / 'libcdio.ver'
   libcdio_link_depends += libcdio_ver
 endif
@@ -67,7 +64,7 @@ libcdio = build_target('cdio',
   version: '@0@.@1@.@2@'.format(libcdio_major, libcdio_age, libcdio_revision),
   soversion: libcdio_major,
   include_directories: [top_inc, include_inc, driver_inc],
-  c_args: libcdio_c_args,
+  c_args: libcdio_c_args + lib_visibility_args + ['-DCDIO_BUILDING_LIBCDIO'],
   link_args: libcdio_link_args,
   link_depends: libcdio_link_depends,
   dependencies: libcdio_deps,
@@ -77,7 +74,7 @@ libcdio = build_target('cdio',
 libcdio_dep = declare_dependency(
   link_with: libcdio,
   include_directories: [include_inc, driver_inc],
-  compile_args: libcdio_c_args,
+  compile_args: libcdio_c_args + cdio_static_args,
   dependencies: [iconv_dep, extra_deps],
   sources: version_h,
 )
@@ -87,4 +84,5 @@ pkg.generate(libcdio,
   name: 'libcdio',
   description: 'Portable CD-ROM I/O library',
   filebase: 'libcdio',
+  extra_cflags: cdio_static_args,
 )

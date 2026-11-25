@@ -27,6 +27,8 @@
 #ifndef CDIO_CDTEXT_H_
 #define CDIO_CDTEXT_H_
 
+#include <cdio/export.h>
+
 #include <cdio/types.h>
 
 #ifdef __cplusplus
@@ -223,12 +225,12 @@ typedef struct cdtext_s cdtext_t;
 /**
   Return string representation of the given genre code.
 */
-const char *cdtext_genre2str(cdtext_genre_t i);
+CDIO_PUBLIC const char *cdtext_genre2str(cdtext_genre_t i);
 
 /**
   Return string representation of the given language code.
 */
-const char *cdtext_lang2str(cdtext_lang_t i);
+CDIO_PUBLIC const char *cdtext_lang2str(cdtext_lang_t i);
 
 /**
  * Return the language code of a given language string representation.
@@ -241,12 +243,12 @@ const char *cdtext_lang2str(cdtext_lang_t i);
  *         the #cdtext_lang_t which is associated, or
  *         #CDTEXT_LANGUAGE_INVALID otherwise.
  */
-cdtext_lang_t cdtext_str2lang(const char *lang);
+CDIO_PUBLIC cdtext_lang_t cdtext_str2lang(const char *lang);
 
 /**
   Return string representation of given field type.
 */
-const char *cdtext_field2str(cdtext_field_t i);
+CDIO_PUBLIC const char *cdtext_field2str(cdtext_field_t i);
 
 /**
   Initialize a new #cdtext_t structure.
@@ -254,7 +256,7 @@ const char *cdtext_field2str(cdtext_field_t i);
   When the structure is no longer needed, release the
   resources using cdtext_destroy().
 */
-cdtext_t *cdtext_init(void);
+CDIO_PUBLIC cdtext_t *cdtext_init(void);
 
 /**
   Fill a #cdtext_t object with text pack bytes as they were handed out by the
@@ -288,14 +290,14 @@ cdtext_t *cdtext_init(void);
 
   @returns 0 on success, non-zero on failure
 */
-int cdtext_data_init(cdtext_t *p_cdtext, uint8_t *wdata, size_t i_data);
+CDIO_PUBLIC int cdtext_data_init(cdtext_t *p_cdtext, uint8_t *wdata, size_t i_data);
 
 /**
   Free memory associated with the given #cdtext_t object.
 
   @param p_cdtext the CD-TEXT object
 */
-void cdtext_destroy(cdtext_t *p_cdtext);
+CDIO_PUBLIC void cdtext_destroy(cdtext_t *p_cdtext);
 
 /**
   Returns a copy of the return value of cdtext_get_const or `NULL`.
@@ -303,7 +305,7 @@ void cdtext_destroy(cdtext_t *p_cdtext);
   Must be freed using cdio_free() when done.
   @see cdtext_get_const
 */
-char *cdtext_get(const cdtext_t *p_cdtext, cdtext_field_t key, track_t track);
+CDIO_PUBLIC char *cdtext_get(const cdtext_t *p_cdtext, cdtext_field_t key, track_t track);
 
 /**
   Returns the value of the given field.
@@ -315,7 +317,7 @@ char *cdtext_get(const cdtext_t *p_cdtext, cdtext_field_t key, track_t track);
   @param field type of the field to return
   @param track specifies the track; 0 stands for disc
 */
-const char *cdtext_get_const(const cdtext_t *p_cdtext, cdtext_field_t field,
+CDIO_PUBLIC const char *cdtext_get_const(const cdtext_t *p_cdtext, cdtext_field_t field,
                              track_t track);
 
 /**
@@ -323,28 +325,28 @@ const char *cdtext_get_const(const cdtext_t *p_cdtext, cdtext_field_t field,
 
   @param p_cdtext the CD-TEXT object
 */
-cdtext_genre_t cdtext_get_genre(const cdtext_t *p_cdtext);
+CDIO_PUBLIC cdtext_genre_t cdtext_get_genre(const cdtext_t *p_cdtext);
 
 /**
   Returns the currently active language.
 
   @param p_cdtext the CD-TEXT object
 */
-cdtext_lang_t cdtext_get_language(const cdtext_t *p_cdtext);
+CDIO_PUBLIC cdtext_lang_t cdtext_get_language(const cdtext_t *p_cdtext);
 
 /**
   Returns the first track number.
 
   @param p_cdtext the CD-TEXT object
 */
-track_t cdtext_get_first_track(const cdtext_t *p_cdtext);
+CDIO_PUBLIC track_t cdtext_get_first_track(const cdtext_t *p_cdtext);
 
 /**
   Returns the last track number.
 
   @param p_cdtext the CD-TEXT object
 */
-track_t cdtext_get_last_track(const cdtext_t *p_cdtext);
+CDIO_PUBLIC track_t cdtext_get_last_track(const cdtext_t *p_cdtext);
 
 /**
   Try to select the given language.
@@ -354,7 +356,7 @@ track_t cdtext_get_last_track(const cdtext_t *p_cdtext);
 
   @return true on success, false if language is not available
 */
-bool cdtext_select_language(cdtext_t *p_cdtext, cdtext_lang_t language);
+CDIO_PUBLIC bool cdtext_select_language(cdtext_t *p_cdtext, cdtext_lang_t language);
 
 /**
 
@@ -373,7 +375,7 @@ bool cdtext_select_language(cdtext_t *p_cdtext, cdtext_lang_t language);
           CDTEXT_LANGUAGE_UNKNOWN not only marks language code 0x00
           but also invalid language codes and invalid language blocks.
 */
-cdtext_lang_t *cdtext_list_languages(const cdtext_t *p_cdtext);
+CDIO_PUBLIC cdtext_lang_t *cdtext_list_languages(const cdtext_t *p_cdtext);
 
 /**
   Returns an array of available languages or `NULL`.
@@ -396,7 +398,7 @@ cdtext_lang_t *cdtext_list_languages(const cdtext_t *p_cdtext);
   #CDTEXT_LANGUAGE_UNKNOWN to #CDTEXT_LANGUAGE_AMHARIC, and is a block
   in that language.
 */
-cdtext_lang_t *cdtext_list_languages_v2(cdtext_t *p_cdtext);
+CDIO_PUBLIC cdtext_lang_t *cdtext_list_languages_v2(cdtext_t *p_cdtext);
 
 /**
   Select the given language by block index. See cdtext_list_languages_v2().
@@ -408,7 +410,7 @@ cdtext_lang_t *cdtext_list_languages_v2(cdtext_t *p_cdtext);
 
   @return true on success, false if no language block is associated to @p idx.
 */
-bool cdtext_set_language_index(cdtext_t *p_cdtext, int idx);
+CDIO_PUBLIC bool cdtext_set_language_index(cdtext_t *p_cdtext, int idx);
 
 /**
   Sets the given field at the given track to the given value.
@@ -421,7 +423,7 @@ bool cdtext_set_language_index(cdtext_t *p_cdtext, int idx);
   @param track track to work on
   @param charset charset to convert from
  */
-void cdtext_set(cdtext_t *p_cdtext, cdtext_field_t key, const uint8_t *value,
+CDIO_PUBLIC void cdtext_set(cdtext_t *p_cdtext, cdtext_field_t key, const uint8_t *value,
                 track_t track, const char *charset);
 
 #ifdef __cplusplus

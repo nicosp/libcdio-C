@@ -19,6 +19,8 @@
 #ifndef CDIO_DRIVER_CDTEXT_PRIVATE_H_
 #define CDIO_DRIVER_CDTEXT_PRIVATE_H_
 
+#include <cdio/export.h>
+
 #include <cdio/types.h>
 
 #ifndef CDIO_CD_MAX_TRACKS
@@ -132,13 +134,13 @@ struct cdtext_s {
   uint8_t  block_i;                                   /**< index of active block  */
 };
 
-int cdtext_read_pack (cdtext_pack_t *pack, const uint8_t *data);
+CDIO_PRIVATE int cdtext_read_pack (cdtext_pack_t *pack, const uint8_t *data);
 
 /**
   returns enum of field if key is a CD-Text keyword,
   returns CDTEXT_FIELD_INVALID otherwise.
 */
-cdtext_field_t cdtext_is_field (const char *field);
+CDIO_PRIVATE cdtext_field_t cdtext_is_field (const char *field);
 
 #endif /* CDIO_DRIVER_CDTEXT_PRIVATE_H_ */
 

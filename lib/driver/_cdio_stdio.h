@@ -20,6 +20,8 @@
 #ifndef CDIO_STDIO_H_
 #define CDIO_STDIO_H_
 
+#include <cdio/export.h>
+
 #include "_cdio_stream.h"
 
 /**
@@ -29,12 +31,12 @@
   cdio_stream_free should be called on the returned value when you
   don't need the stream any more. No other finalization is needed.
  */
-CdioDataSource_t * cdio_stdio_new(const char psz_path[]);
+CDIO_PUBLIC CdioDataSource_t * cdio_stdio_new(const char psz_path[]);
 
 /**
   Deallocate resources assocaited with obj. After this obj is unusable.
 */
-void cdio_stdio_destroy(CdioDataSource_t *p_obj);
+CDIO_PUBLIC void cdio_stdio_destroy(CdioDataSource_t *p_obj);
 
 
 #endif /* CDIO_STDIO_H_ */

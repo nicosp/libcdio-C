@@ -25,6 +25,8 @@
 #ifndef UDF_FILE_H
 #define UDF_FILE_H 
 
+#include <cdio/export.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -32,39 +34,39 @@ extern "C" {
   /**
     Return the file id descriptor of the given file.
   */
-  bool udf_get_fileid_descriptor(const udf_dirent_t *p_udf_dirent, 
+  UDF_PUBLIC bool udf_get_fileid_descriptor(const udf_dirent_t *p_udf_dirent, 
 				 /*out*/ udf_fileid_desc_t *p_udf_fid);
 
   /**
     Return the name of the file
   */
-  const char *udf_get_filename(const udf_dirent_t *p_udf_dirent);
+  UDF_PUBLIC const char *udf_get_filename(const udf_dirent_t *p_udf_dirent);
   
   /**
     Return the name of the file
   */
-  bool udf_get_file_entry(const udf_dirent_t *p_udf_dirent, 
+  UDF_PUBLIC bool udf_get_file_entry(const udf_dirent_t *p_udf_dirent, 
 			  /*out*/ udf_file_entry_t *p_udf_fe);
 
   /**
     Return the number of hard links of the file. Return 0 if error.
   */
-  uint16_t udf_get_link_count(const udf_dirent_t *p_udf_dirent);
+  UDF_PUBLIC uint16_t udf_get_link_count(const udf_dirent_t *p_udf_dirent);
 
   /**
     Return the file length the file. Return 2147483647L if error.
   */
-  uint64_t udf_get_file_length(const udf_dirent_t *p_udf_dirent);
+  UDF_PUBLIC uint64_t udf_get_file_length(const udf_dirent_t *p_udf_dirent);
 
   /**  
     Returns a POSIX mode for a given p_udf_dirent.
   */
-  mode_t udf_get_posix_filemode(const udf_dirent_t *p_udf_dirent);
+  UDF_PUBLIC mode_t udf_get_posix_filemode(const udf_dirent_t *p_udf_dirent);
 
   /**
     Return the next subdirectory. 
   */
-  udf_dirent_t *udf_opendir(const udf_dirent_t *p_udf_dirent);
+  UDF_PUBLIC udf_dirent_t *udf_opendir(const udf_dirent_t *p_udf_dirent);
   
   /**
      Attempts to read up to count blocks from UDF directory entry
@@ -79,7 +81,7 @@ extern "C" {
      On success, returns the number of bytes read. If there is an error,
      cast the result to driver_return_code_t for the specific error code.
   */
-  ssize_t udf_read_block(const udf_dirent_t *p_udf_dirent, 
+  UDF_PUBLIC ssize_t udf_read_block(const udf_dirent_t *p_udf_dirent, 
 			 void * buf, size_t count);
 
   /**
@@ -90,17 +92,17 @@ extern "C" {
     must call udf_dirent_free() with p_udf_dirent when done with it to 
     release resources.
   */
-  udf_dirent_t *udf_readdir(udf_dirent_t *p_udf_dirent);
+  UDF_PUBLIC udf_dirent_t *udf_readdir(udf_dirent_t *p_udf_dirent);
   
   /**
     free free resources associated with p_udf_dirent.
   */
-  bool udf_dirent_free(udf_dirent_t *p_udf_dirent);
+  UDF_PUBLIC bool udf_dirent_free(udf_dirent_t *p_udf_dirent);
   
   /**
     Return true if the file is a directory.
   */
-  bool udf_is_dir(const udf_dirent_t *p_udf_dirent);
+  UDF_PUBLIC bool udf_is_dir(const udf_dirent_t *p_udf_dirent);
   
 #ifdef __cplusplus
 }

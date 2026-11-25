@@ -46,8 +46,7 @@ libcdio_la_AGE = 0
 
 EXTRA_DIST = image/Makefile \
 	mmc/Makefile \
-	FreeBSD/Makefile MSWindows/Makefile \
-	libcdio.sym
+	FreeBSD/Makefile MSWindows/Makefile
 
 noinst_HEADERS = cdio_assert.h cdio_private.h filemode.h portable.h
 
@@ -109,7 +108,8 @@ libcdio_la_LIBADD  = $(LTLIBICONV)
 libcdio_la_SOURCES = $(libcdio_sources)
 libcdio_la_ldflags = -version-info $(libcdio_la_CURRENT):$(libcdio_la_REVISION):$(libcdio_la_AGE) @LT_NO_UNDEFINED@ $(DARWIN_PKG_LIB_HACK)
 
-AM_CPPFLAGS = $(LIBCDIO_CFLAGS)
+AM_CPPFLAGS = $(LIBCDIO_CFLAGS) -DCDIO_BUILDING_LIBCDIO
+AM_CFLAGS = $(VISIBILITY_CFLAGS)
 
 ########################################################
 # Things to version the symbols in the libraries
@@ -161,26 +161,19 @@ AM_CPPFLAGS = $(LIBCDIO_CFLAGS)
 # work...
 
 
-# The below is a implements symbol versioning.  First of all, I
-# compute MAJOR as CURRENT - AGE; that is what is used within libtool
-# (at least on GNU/Linux systems) for the number in the SONAME.  The
-# nm command gives the list of symbols known in each of the object
-# files that will be part of the shared library. And the sed command
-# extracts from this list those symbols that will be shared. (This sed
-# command comes from libtool.)
+# The below implements symbol versioning.  MAJOR is CURRENT - AGE,
+# which is what libtool (at least on GNU/Linux) uses for the number in
+# the SONAME.  Which symbols are exported is decided by the CDIO_PUBLIC
+# marks in the headers (see <cdio/export.h>), with the library compiled
+# -fvisibility=hidden; the version script only tags them all CDIO_MAJOR.
 
 libcdio_la_MAJOR = $(shell expr $(libcdio_la_CURRENT) - $(libcdio_la_AGE))
 if BUILD_VERSIONED_LIBS
 libcdio_la_LDFLAGS = $(libcdio_la_ldflags) -Wl,--version-script=libcdio.la.ver
 libcdio_la_DEPENDENCIES = libcdio.la.ver
 
-libcdio.la.ver: $(srcdir)/libcdio.sym
-	@echo 'CDIO_$(libcdio_la_MAJOR) { ' > $@
-	@echo '  global:' >> $@
-	@sed 's/^/    /;s/$$/;/' $< >> $@
-	@echo '  local:' >> $@
-	@echo '    *;' >> $@
-	@echo '};' >> $@
+libcdio.la.ver: Makefile
+	@echo 'CDIO_$(libcdio_la_MAJOR) { global: *; };' > $@
 else
 libcdio_la_LDFLAGS = $(libcdio_la_ldflags)
 endif

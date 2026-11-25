@@ -25,6 +25,8 @@
 #ifndef CDIO_MMC_HL_CMDS_H_
 #define CDIO_MMC_HL_CMDS_H_
 
+#include <cdio/export.h>
+
 #include <cdio/mmc.h>
 
 #ifdef __cplusplus
@@ -37,7 +39,7 @@ extern "C" {
      @return DRIVER_OP_SUCCESS (0) if we got the status.
      return codes are the same as driver_return_code_t
   */
-  driver_return_code_t mmc_close_tray( CdIo_t *p_cdio );
+  CDIO_PUBLIC driver_return_code_t mmc_close_tray( CdIo_t *p_cdio );
   
   /**
      Detects if a disc (CD or DVD) is erasable or not.
@@ -51,7 +53,7 @@ extern "C" {
      @return true if the disc is detected as erasable (rewritable), false
      otherwise.
   */
-  driver_return_code_t mmc_get_disc_erasable(const CdIo_t *p_cdio, 
+  CDIO_PUBLIC driver_return_code_t mmc_get_disc_erasable(const CdIo_t *p_cdio, 
                                              bool *b_erasable);
     
   /**
@@ -63,7 +65,7 @@ extern "C" {
    @return DRIVER_OP_SUCCESS (0) if we got the status.
    return codes are the same as driver_return_code_t  
   */
-  driver_return_code_t mmc_eject_media( const CdIo_t *p_cdio );
+  CDIO_PUBLIC driver_return_code_t mmc_eject_media( const CdIo_t *p_cdio );
   
   /**
      Detects the disc type using the SCSI-MMC GET CONFIGURATION command.
@@ -76,7 +78,7 @@ extern "C" {
      @return DRIVER_OP_SUCCESS (0) if we got the status.
    return codes are the same as driver_return_code_t
   */
-  driver_return_code_t mmc_get_disctype(const CdIo_t *p_cdio, 
+  CDIO_PUBLIC driver_return_code_t mmc_get_disctype(const CdIo_t *p_cdio, 
                                         unsigned int i_timeout_ms,
                                         cdio_mmc_feature_profile_t *p_disctype);
 
@@ -93,7 +95,7 @@ extern "C" {
 
      @return DRIVER_OP_SUCCESS if we ran the command ok.
   */
-  driver_return_code_t mmc_mode_sense( CdIo_t *p_cdio, /*out*/ void *p_buf,
+  CDIO_PUBLIC driver_return_code_t mmc_mode_sense( CdIo_t *p_cdio, /*out*/ void *p_buf,
                                        unsigned int i_size, int page);
   
   /**

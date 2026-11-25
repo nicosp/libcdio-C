@@ -26,6 +26,8 @@
 #ifndef UDF_H
 #define UDF_H
 
+#include <cdio/export.h>
+
 #include <cdio/cdio.h>
 #include <cdio/ecma_167.h>
 #include <cdio/posix.h>
@@ -67,7 +69,7 @@ typedef enum {
     be recorded in debug symbol tables. It is used to allow one refer
     to above enumeration values in a debugger and debugger
     expressions */
-extern udf_enum1_t debug_udf_enum1;
+UDF_PUBLIC extern udf_enum1_t debug_udf_enum1;
 
 #ifdef __cplusplus
 extern "C" {
@@ -76,7 +78,7 @@ extern "C" {
   /**
     Close UDF and free resources associated with p_udf.
   */
-  bool udf_close (udf_t *p_udf);
+  UDF_PUBLIC bool udf_close (udf_t *p_udf);
 
   /**
     Seek to a position i_start and then read i_blocks. Number of
@@ -84,7 +86,7 @@ extern "C" {
     equal to i_blocks.
   */
 
-  driver_return_code_t udf_read_sectors (const udf_t *p_udf, void *ptr,
+  UDF_PUBLIC driver_return_code_t udf_read_sectors (const udf_t *p_udf, void *ptr,
                                          lsn_t i_start,  long int i_blocks);
 
   /**
@@ -93,13 +95,13 @@ extern "C" {
 
     Caller must free result - use udf_close for that.
   */
-  udf_t *udf_open (const char *psz_path);
+  UDF_PUBLIC udf_t *udf_open (const char *psz_path);
 
   /**
     Return the partition number of the the opened udf handle. -1
     Is returned if we have an error.
   */
-  int16_t udf_get_part_number(const udf_t *p_udf);
+  UDF_PUBLIC int16_t udf_get_part_number(const udf_t *p_udf);
 
   /**
     Get the root in p_udf. If b_any_partition is false then
@@ -109,7 +111,7 @@ extern "C" {
 
     Caller must free result - use udf_file_free for that.
   */
-  udf_dirent_t *udf_get_root (udf_t *p_udf, bool b_any_partition,
+  UDF_PUBLIC udf_dirent_t *udf_get_root (udf_t *p_udf, bool b_any_partition,
                               partition_num_t i_partition);
 
   /**
@@ -118,7 +120,7 @@ extern "C" {
    * i_volid, size of the buffer psz_volid points to
    * returns the size of buffer needed for all data
    */
-  int udf_get_volume_id(udf_t *p_udf, /*out*/ char *psz_volid,
+  UDF_PUBLIC int udf_get_volume_id(udf_t *p_udf, /*out*/ char *psz_volid,
                         unsigned int i_volid);
 
   /**
@@ -130,7 +132,7 @@ extern "C" {
    * returns the size of the available volsetid information (128)
    * or 0 on error
    */
-  int udf_get_volumeset_id(udf_t *p_udf, /*out*/ uint8_t *volsetid,
+  UDF_PUBLIC int udf_get_volumeset_id(udf_t *p_udf, /*out*/ uint8_t *volsetid,
                            unsigned int i_volsetid);
 
   /**
@@ -140,13 +142,13 @@ extern "C" {
    * returns the size of buffer needed for all data
    * A call to udf_get_root() should have been issued before this call
    */
-  int udf_get_logical_volume_id(udf_t *p_udf, /*out*/ char *psz_logvolid,
+  UDF_PUBLIC int udf_get_logical_volume_id(udf_t *p_udf, /*out*/ char *psz_logvolid,
                         unsigned int i_logvolid);
 
   /**
     Return a file pointer matching psz_name.
   */
-  udf_dirent_t *udf_fopen(udf_dirent_t *p_udf_root, const char *psz_name);
+  UDF_PUBLIC udf_dirent_t *udf_fopen(udf_dirent_t *p_udf_root, const char *psz_name);
 
   /** udf_mode_string - fill in string PSZ_STR with an ls-style ASCII
     representation of the i_mode. PSZ_STR is returned.
@@ -185,9 +187,9 @@ extern "C" {
         otherwise.
         'T' if the file is sticky but not executable.  */
 
-    char *udf_mode_string (mode_t i_mode, char *psz_str);
+    UDF_PUBLIC char *udf_mode_string (mode_t i_mode, char *psz_str);
 
-    bool udf_get_lba(const udf_file_entry_t *p_udf_fe,
+    UDF_PUBLIC bool udf_get_lba(const udf_file_entry_t *p_udf_fe,
                      /*out*/ uint32_t *start, /*out*/ uint32_t *end);
 
     /**
@@ -197,7 +199,7 @@ extern "C" {
      * any error condition (such as offset out of range or not aligned to
      * UDF_BLOCKSIZE).
      */
-    bool udf_setpos(udf_dirent_t* p_udf_dirent, off_t offset);
+    UDF_PUBLIC bool udf_setpos(udf_dirent_t* p_udf_dirent, off_t offset);
 
 #ifdef __cplusplus
 }

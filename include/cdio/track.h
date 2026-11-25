@@ -21,12 +21,14 @@
 #ifndef CDIO_TRACK_H_
 #define CDIO_TRACK_H_
 
+#include <cdio/export.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
   /** Printable tags for track_format_t enumeration.  */
-  extern const char *track_format2str[6];
+  CDIO_PUBLIC extern const char *track_format2str[6];
 
   typedef enum  {
     TRACK_FORMAT_AUDIO,   /**< Audio track, e.g. CD-DA */
@@ -102,13 +104,13 @@ extern "C" {
     @return the track number or CDIO_INVALID_TRACK
     on error.
   */
-  track_t cdio_get_first_track_num(const CdIo_t *p_cdio);
+  CDIO_PUBLIC track_t cdio_get_first_track_num(const CdIo_t *p_cdio);
 
   /**
     Return the last track number.
     CDIO_INVALID_TRACK is returned on error.
   */
-  track_t cdio_get_last_track_num (const CdIo_t *p_cdio);
+  CDIO_PUBLIC track_t cdio_get_last_track_num (const CdIo_t *p_cdio);
 
 
   /** Find the track which contains lsn.
@@ -118,24 +120,24 @@ extern "C" {
     If the lsn is before the pregap of the first track 0 is returned.
     Otherwise we return the track that spans the lsn.
   */
-  track_t cdio_get_track(const CdIo_t *p_cdio, lsn_t lsn);
+  CDIO_PUBLIC track_t cdio_get_track(const CdIo_t *p_cdio, lsn_t lsn);
 
   /** Return number of channels in track: 2 or 4; -2 if not
       implemented or -1 for error.
       Not meaningful if track is not an audio track.
   */
-  int cdio_get_track_channels(const CdIo_t *p_cdio, track_t i_track);
+  CDIO_PUBLIC int cdio_get_track_channels(const CdIo_t *p_cdio, track_t i_track);
 
   /** Return copy protection status on a track. Is this meaningful
       if not an audio track?
    */
-  track_flag_t cdio_get_track_copy_permit(const CdIo_t *p_cdio,
+  CDIO_PUBLIC track_flag_t cdio_get_track_copy_permit(const CdIo_t *p_cdio,
                                           track_t i_track);
 
   /**
     Get the format (audio, mode2, mode1) of track.
   */
-  track_format_t cdio_get_track_format(const CdIo_t *p_cdio, track_t i_track);
+  CDIO_PUBLIC track_format_t cdio_get_track_format(const CdIo_t *p_cdio, track_t i_track);
 
   /**
     Return true if we have XA data (green, mode2 form1) or
@@ -145,13 +147,13 @@ extern "C" {
 
     FIXME: there's gotta be a better design for this and get_track_format?
   */
-  bool cdio_get_track_green(const CdIo_t *p_cdio, track_t i_track);
+  CDIO_PUBLIC bool cdio_get_track_green(const CdIo_t *p_cdio, track_t i_track);
 
   /**
     Return the ending LSN for track number
     i_track in cdio.  CDIO_INVALID_LSN is returned on error.
   */
-  lsn_t cdio_get_track_last_lsn(const CdIo_t *p_cdio, track_t i_track);
+  CDIO_PUBLIC lsn_t cdio_get_track_last_lsn(const CdIo_t *p_cdio, track_t i_track);
 
   /**
     Get the starting LBA for track number
@@ -165,7 +167,7 @@ extern "C" {
     @param i_track  the track number we want the LSN for
     @return the starting LBA or CDIO_INVALID_LBA on error.
   */
-  lba_t cdio_get_track_lba(const CdIo_t *p_cdio, track_t i_track);
+  CDIO_PUBLIC lba_t cdio_get_track_lba(const CdIo_t *p_cdio, track_t i_track);
 
   /**
     Return the starting LSN for track number
@@ -179,7 +181,7 @@ extern "C" {
     @param i_track  the track number we want the LSN for
     @return the starting LSN or CDIO_INVALID_LSN on error.
   */
-  lsn_t cdio_get_track_lsn(const CdIo_t *p_cdio, track_t i_track);
+  CDIO_PUBLIC lsn_t cdio_get_track_lsn(const CdIo_t *p_cdio, track_t i_track);
 
   /**
     Return the starting LBA for the pregap for track number
@@ -190,7 +192,7 @@ extern "C" {
     @param i_track  the track number we want the LBA for
     @return the starting LBA or CDIO_INVALID_LBA on error.
   */
-  lba_t cdio_get_track_pregap_lba(const CdIo_t *p_cdio, track_t i_track);
+  CDIO_PUBLIC lba_t cdio_get_track_pregap_lba(const CdIo_t *p_cdio, track_t i_track);
 
   /**
     Return the starting LSN for the pregap for track number
@@ -201,7 +203,7 @@ extern "C" {
     @param i_track  the track number we want the LSN for
     @return the starting LSN or CDIO_INVALID_LSN on error.
   */
-  lsn_t cdio_get_track_pregap_lsn(const CdIo_t *p_cdio, track_t i_track);
+  CDIO_PUBLIC lsn_t cdio_get_track_pregap_lsn(const CdIo_t *p_cdio, track_t i_track);
 
   /**
     Get the International Standard Recording Code (ISRC) for track number
@@ -215,7 +217,7 @@ extern "C" {
     when done with it.
 
   */
-  char * cdio_get_track_isrc (const CdIo_t *p_cdio, track_t i_track);
+  CDIO_PUBLIC char * cdio_get_track_isrc (const CdIo_t *p_cdio, track_t i_track);
 
   /**
     Return the starting MSF (minutes/secs/frames) for track number
@@ -227,13 +229,13 @@ extern "C" {
 
     @return true if things worked or false if there is no track entry.
   */
-  bool cdio_get_track_msf(const CdIo_t *p_cdio, track_t i_track,
+  CDIO_PUBLIC bool cdio_get_track_msf(const CdIo_t *p_cdio, track_t i_track,
                           /*out*/ msf_t *msf);
 
   /** Get linear preemphasis status on an audio track
       This is not meaningful if not an audio track?
    */
-  track_flag_t cdio_get_track_preemphasis(const CdIo_t *p_cdio,
+  CDIO_PUBLIC track_flag_t cdio_get_track_preemphasis(const CdIo_t *p_cdio,
                                           track_t i_track);
 
   /**
@@ -244,7 +246,7 @@ extern "C" {
 
     @return the number of sectors or 0 if there is an error.
   */
-  unsigned int cdio_get_track_sec_count(const CdIo_t *p_cdio, track_t i_track);
+  CDIO_PUBLIC unsigned int cdio_get_track_sec_count(const CdIo_t *p_cdio, track_t i_track);
 
 #ifdef __cplusplus
 }

@@ -52,6 +52,8 @@
 #ifndef CDIO_ECMA_167_H
 #define CDIO_ECMA_167_H 1
 
+#include <cdio/export.h>
+
 #include <cdio/types.h>
 
 /**
@@ -203,12 +205,12 @@ struct vol_struct_desc_s
 
 /* The below const definitions are to facilitate debugging of the
    values #define'd below. */
-extern const char VSD_STD_ID_BEA01[sizeof("BEA01")-1];
-extern const char VSD_STD_ID_BOOT2[sizeof("BOOT2")-1];
-extern const char VSD_STD_ID_CD001[sizeof("CD001")-1];
-extern const char VSD_STD_ID_CDW01[sizeof("CDW02")-1];
-extern const char VSD_STD_ID_NSR03[sizeof("NSR03")-1];
-extern const char VSD_STD_ID_TEA01[sizeof("TEA01")-1];
+UDF_PUBLIC extern const char VSD_STD_ID_BEA01[sizeof("BEA01")-1];
+UDF_PUBLIC extern const char VSD_STD_ID_BOOT2[sizeof("BOOT2")-1];
+UDF_PUBLIC extern const char VSD_STD_ID_CD001[sizeof("CD001")-1];
+UDF_PUBLIC extern const char VSD_STD_ID_CDW01[sizeof("CDW02")-1];
+UDF_PUBLIC extern const char VSD_STD_ID_NSR03[sizeof("NSR03")-1];
+UDF_PUBLIC extern const char VSD_STD_ID_TEA01[sizeof("TEA01")-1];
 
 #define VSD_STD_ID_BEA01                "BEA01" /**< ECMA-167 2/9.2 */
 #define VSD_STD_ID_BOOT2                "BOOT2" /**< ECMA-167 2/9.4 */
@@ -1033,11 +1035,11 @@ PRAGMA_END_PACKED
     allow one refer to the enumeration value names in the typedefs
     above in a debugger and in debugger expressions.
 */
-extern tag_id_t                 debug_tagid;
-extern file_characteristics_t   debug_file_characteristics;
-extern icbtag_file_type_enum_t  debug_icbtag_file_type_enum;
-extern icbtag_flag_enum_t       debug_flag_enum;
-extern ecma_167_enum1_t         debug_ecma_167_enum1;
-extern ecma_167_timezone_enum_t debug_ecma_167_timezone_enum;
+UDF_PUBLIC extern tag_id_t                 debug_tagid;
+UDF_PUBLIC extern file_characteristics_t   debug_file_characteristics;
+UDF_PUBLIC extern icbtag_file_type_enum_t  debug_icbtag_file_type_enum;
+UDF_PUBLIC extern icbtag_flag_enum_t       debug_flag_enum;
+UDF_PUBLIC extern ecma_167_enum1_t         debug_ecma_167_enum1;
+UDF_PUBLIC extern ecma_167_timezone_enum_t debug_ecma_167_timezone_enum;
 
 #endif /* CDIO_ECMA_167_H */

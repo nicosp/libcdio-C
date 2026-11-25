@@ -10,6 +10,7 @@ cdio_headers = files(
   'ds.h',
   'dvd.h',
   'ecma_167.h',
+  'export.h',
   'iso9660.h',
   'logging.h',
   'memory.h',

@@ -5,7 +5,7 @@ libcdiopp_major = libcdiopp_current - libcdiopp_age
 
 libcdiopp = build_target('cdio++',
   'cdio.cpp', 'devices.cpp',
-  target_type: lib_type,
+  target_type: lib_type_cxx,
   version: '@0@.@1@.@2@'.format(libcdiopp_major, libcdiopp_age,
                                 libcdiopp_revision),
   soversion: libcdiopp_major,
@@ -27,7 +27,7 @@ libiso9660pp_major = libiso9660pp_current - libiso9660pp_age
 
 libiso9660pp = build_target('iso9660++',
   'iso9660.cpp',
-  target_type: lib_type,
+  target_type: lib_type_cxx,
   version: '@0@.@1@.@2@'.format(libiso9660pp_major, libiso9660pp_age,
                                 libiso9660pp_revision),
   soversion: libiso9660pp_major,

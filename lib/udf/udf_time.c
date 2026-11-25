@@ -55,7 +55,7 @@
    Imagine the below enum values as #define'd or constant values
    rather than distinct values of an enum.
 */
-enum {
+UDF_PUBLIC enum {
   HOURS_PER_DAY    =   24,
   SECS_PER_MINUTE  =   60,
   DAYS_PER_YEAR    =  365,  /* That is, in most of the years. */

@@ -36,6 +36,8 @@
 #ifndef CDIO_MMC_LL_CMDS_H_
 #define CDIO_MMC_LL_CMDS_H_
 
+#include <cdio/export.h>
+
 #include <cdio/mmc.h>
 
 #ifdef __cplusplus
@@ -67,7 +69,7 @@ extern "C" {
    @return \p DRIVER_OP_SUCCESS (0) if we got the status.
    return codes are the same as \p driver_return_code_t
 */
-driver_return_code_t
+CDIO_PUBLIC driver_return_code_t
 mmc_get_configuration(const CdIo_t *p_cdio, void *p_buf, unsigned int i_size,
                       unsigned int i_return_type,
                       unsigned int i_starting_feature_number,
@@ -83,7 +85,7 @@ mmc_get_configuration(const CdIo_t *p_cdio, void *p_buf, unsigned int i_size,
   @return \p DRIVER_OP_SUCCESS (0) if we got the status. Return codes
   are the same as \p driver_return_code_t
  */
-driver_return_code_t mmc_get_event_status(const CdIo_t *p_cdio,
+CDIO_PUBLIC driver_return_code_t mmc_get_event_status(const CdIo_t *p_cdio,
                                           uint8_t out_buf[2]);
 
 /**
@@ -104,7 +106,7 @@ driver_return_code_t mmc_get_event_status(const CdIo_t *p_cdio,
 
    @return \p DRIVER_OP_SUCCESS if we ran the command ok.
 */
-driver_return_code_t mmc_mode_select_10(CdIo_t *p_cdio, /*out*/ void *p_buf,
+CDIO_PUBLIC driver_return_code_t mmc_mode_select_10(CdIo_t *p_cdio, /*out*/ void *p_buf,
                                         unsigned int i_size, int page,
                                         unsigned int i_timeout_ms);
 /**
@@ -120,7 +122,7 @@ driver_return_code_t mmc_mode_select_10(CdIo_t *p_cdio, /*out*/ void *p_buf,
 
    @return \p DRIVER_OP_SUCCESS if we ran the command ok.
 */
-driver_return_code_t mmc_mode_sense_10(CdIo_t *p_cdio, /*out*/ void *p_buf,
+CDIO_PUBLIC driver_return_code_t mmc_mode_sense_10(CdIo_t *p_cdio, /*out*/ void *p_buf,
                                        unsigned int i_size,
                                        unsigned int i_page_code);
 
@@ -133,7 +135,7 @@ driver_return_code_t mmc_mode_sense_10(CdIo_t *p_cdio, /*out*/ void *p_buf,
     @param page which "page" of the mode sense command we are interested in
     @return \p DRIVER_OP_SUCCESS if we ran the command ok.
 */
-driver_return_code_t mmc_mode_sense_6(CdIo_t *p_cdio, /*out*/ void *p_buf,
+CDIO_PUBLIC driver_return_code_t mmc_mode_sense_6(CdIo_t *p_cdio, /*out*/ void *p_buf,
                                       unsigned int i_size, int page);
 
 /**
@@ -151,7 +153,7 @@ driver_return_code_t mmc_mode_sense_6(CdIo_t *p_cdio, /*out*/ void *p_buf,
    @return \p DRIVER_OP_SUCCESS (0) if we got the status.
    return codes are the same as \p driver_return_code_t
 */
-driver_return_code_t
+CDIO_PUBLIC driver_return_code_t
 mmc_prevent_allow_medium_removal(const CdIo_t *p_cdio, bool b_persistent,
                                  bool b_prevent, unsigned int i_timeout_ms);
 
@@ -258,7 +260,7 @@ mmc_prevent_allow_medium_removal(const CdIo_t *p_cdio, bool b_persistent,
 
   @return \p DRIVER_OP_SUCCESS if we ran the command ok.
 */
-driver_return_code_t mmc_read_cd(const CdIo_t *p_cdio, void *p_buf, lsn_t i_lsn,
+CDIO_PUBLIC driver_return_code_t mmc_read_cd(const CdIo_t *p_cdio, void *p_buf, lsn_t i_lsn,
                                  int expected_sector_type,
                                  bool b_digital_audio_play, bool b_sync,
                                  uint8_t header_codes, bool b_user_data,
@@ -284,7 +286,7 @@ driver_return_code_t mmc_read_cd(const CdIo_t *p_cdio, void *p_buf, lsn_t i_lsn,
 
    @return DRIVER_OP_SUCCESS (0) if we got the status.
 */
-driver_return_code_t mmc_read_disc_information(
+CDIO_PUBLIC driver_return_code_t mmc_read_disc_information(
     const CdIo_t *p_cdio, /*out*/ void *p_buf, unsigned int i_size,
     cdio_mmc_read_disc_info_datatype_t data_type, unsigned int i_timeout_ms);
 
@@ -314,7 +316,7 @@ driver_return_code_t mmc_read_disc_information(
 
   @see cdio_set_speed and mmc_set_drive_speed
 */
-driver_return_code_t mmc_set_speed(const CdIo_t *p_cdio, int i_Kbs_speed,
+CDIO_PUBLIC driver_return_code_t mmc_set_speed(const CdIo_t *p_cdio, int i_Kbs_speed,
                                    unsigned int i_timeout_ms);
 
 /**
@@ -337,7 +339,7 @@ driver_return_code_t mmc_set_speed(const CdIo_t *p_cdio, int i_Kbs_speed,
 
   @see mmc_eject_media or mmc_close_tray
 */
-driver_return_code_t mmc_start_stop_unit(const CdIo_t *p_cdio, bool b_eject,
+CDIO_PUBLIC driver_return_code_t mmc_start_stop_unit(const CdIo_t *p_cdio, bool b_eject,
                                          bool b_immediate,
                                          uint8_t power_condition,
                                          unsigned int i_timeout_ms);
@@ -353,7 +355,7 @@ driver_return_code_t mmc_start_stop_unit(const CdIo_t *p_cdio, bool b_eject,
 
  @return \p DRIVER_OP_SUCCESS if we ran the command ok.
 */
-driver_return_code_t mmc_test_unit_ready(const CdIo_t *p_cdio,
+CDIO_PUBLIC driver_return_code_t mmc_test_unit_ready(const CdIo_t *p_cdio,
                                          unsigned int i_timeout_ms);
 
 /**

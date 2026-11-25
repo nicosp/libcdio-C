@@ -44,8 +44,6 @@ libudf_la_CURRENT = 5
 libudf_la_REVISION = 0
 libudf_la_AGE = 0
 
-EXTRA_DIST = libudf.sym
-
 noinst_HEADERS = udf_fs.h udf_private.h
 
 lib_LTLIBRARIES = libudf.la
@@ -54,4 +52,5 @@ libudf_la_SOURCES = udf.c udf_file.c udf_fs.c udf_time.c filemode.c
 
 libudf_la_LIBADD = @LIBCDIO_LIBS@ @LT_NO_UNDEFINED@
 
-AM_CPPFLAGS = $(LIBCDIO_CFLAGS)
+AM_CPPFLAGS = $(LIBCDIO_CFLAGS) -DCDIO_BUILDING_LIBUDF
+AM_CFLAGS = $(VISIBILITY_CFLAGS)

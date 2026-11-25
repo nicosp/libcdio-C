@@ -39,9 +39,7 @@ cc = meson.get_compiler('c')
 system = host_machine.system()
 
 # Microsoft's compiler (cl, or clang-cl).  config.h comes from the same
-# checks as everywhere else; Win32 calls replace iconv, and the
-# libraries are static because nothing in libcdio is marked
-# __declspec(dllexport).  To link
+# checks as everywhere else, and Win32 calls replace iconv.  To link
 # the C runtime statically as libcdio.sln does, pass
 # -Db_vscrt=static_from_buildtype.
 is_msvc = cc.get_argument_syntax() == 'msvc'
@@ -522,8 +520,23 @@ endif
 
 configure_file(output: 'config.h', configuration: conf)
 
-# Static only under MSVC; see is_msvc above.
-lib_type = is_msvc ? 'static_library' : 'library'
+# The C libraries export what <cdio/export.h> marks: CDIO_PUBLIC and
+# friends are __declspec(dllexport) on Windows, and elsewhere the
+# libraries are compiled -fvisibility=hidden so nothing else gets out.
+is_windows = system == 'windows' or system == 'cygwin'
+lib_type = 'library'
+lib_visibility_args = []
+if not is_windows
+  lib_visibility_args = cc.get_supported_arguments('-fvisibility=hidden')
+endif
+# Programs linking the static libraries on Windows must not import the
+# symbols from a DLL.
+cdio_static_args = []
+if is_windows and get_option('default_library') == 'static'
+  cdio_static_args = ['-DCDIO_STATIC']
+endif
+# The C++ bindings mark nothing for export, so MSVC builds them static.
+lib_type_cxx = is_msvc ? 'static_library' : 'library'
 
 top_inc = include_directories('.')
 include_inc = include_directories('include')
