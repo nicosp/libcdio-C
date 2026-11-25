@@ -17,12 +17,16 @@
 #
 
 if test "X$srcdir" = "X" ; then
-  exit $SKIP_TEST_EXITCODE
+  srcdir=`pwd`
 fi
 
-. $srcdir/check_common_fn
+if test "X$top_builddir" = "X" ; then
+  top_builddir=`pwd`/..
+fi
 
-CDTEXT_RAW=$srcdir/../example/cdtext-raw
+. ${top_builddir}/test/check_common_fn
+
+CDTEXT_RAW=${top_builddir}/example/cdtext-raw
 
 if test ! -x $CDTEXT_RAW ; then
   exit $SKIP_TEST_EXITCODE
@@ -58,19 +62,19 @@ test_cdtext_raw() {
 
 fname=cdtext
 opts="${srcdir}/data/${fname}.cdt"
-test_cdtext_raw "$opts" ${srcdir}/${fname}.dump ${srcdir}/${fname}.right
+test_cdtext_raw "$opts" ${fname}.dump ${srcdir}/${fname}.right
 RC=$?
 check_result $RC "CD-Text parser" "${CDTEXT_RAW} $opts"
 
 fname=cdtext-libburnia
 opts="${srcdir}/data/${fname}.cdt"
-test_cdtext_raw "$opts" ${srcdir}/${fname}.dump ${srcdir}/${fname}.right
+test_cdtext_raw "$opts" ${fname}.dump ${srcdir}/${fname}.right
 RC=$?
 check_result $RC "CD-Text libburnia roundtrip" "${CDTEXT_RAW} $opts"
 
 fname=cdtext-krosis
 opts="${srcdir}/data/${fname}.cdt"
-test_cdtext_raw "$opts" ${srcdir}/${fname}.dump ${srcdir}/${fname}.right
+test_cdtext_raw "$opts" ${fname}.dump ${srcdir}/${fname}.right
 RC=$?
 check_result $RC "CD-Text Krosis blanks + tab indicator" "${CDTEXT_RAW} $opts"
 

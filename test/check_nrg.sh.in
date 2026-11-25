@@ -19,7 +19,7 @@ fi
 
 . ${top_builddir}/test/check_common_fn
 
-if test ! -x $top_srcdir/src/cd-info ; then
+if test ! -x $top_builddir/src/cd-info@EXEEXT@ ; then
   exit 77
 fi
 
