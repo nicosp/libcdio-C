@@ -39,3 +39,23 @@ jobs:
 
     - name: Test
       run: make check
+
+    - name: Link a program against the static and the shared libcdio
+      # MinGW programs must link either library without defining
+      # CDIO_STATIC.  Use variables as well as a function: variables are
+      # what needs __declspec(dllimport) under MSVC.
+      run: |
+        cat > link-test.c <<'TEST'
+        #include <stdio.h>
+        #include <cdio/cdio.h>
+        #include <cdio/version.h>
+        int main(void) {
+          printf("%s %u %s\n", cdio_version_string, libcdio_version_num,
+                 cdio_driver_describe(DRIVER_BINCUE));
+          return cdio_have_driver(DRIVER_BINCUE) ? 0 : 1;
+        }
+        TEST
+        gcc -Iinclude -o link-static.exe link-test.c lib/driver/.libs/libcdio.a -liconv -lwinmm
+        ./link-static.exe
+        gcc -Iinclude -o link-shared.exe link-test.c lib/driver/.libs/libcdio.dll.a
+        PATH="$PWD/lib/driver/.libs:$PATH" ./link-shared.exe

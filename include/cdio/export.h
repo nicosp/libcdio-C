@@ -25,16 +25,20 @@
  *  being built the macro exports the symbol: __declspec(dllexport) on
  *  Windows, default visibility elsewhere (the libraries are compiled
  *  with -fvisibility=hidden, so nothing unmarked is exported).  In
- *  programs that use the library it imports the symbol, which on
- *  Windows is what lets a program use a variable from a DLL.
+ *  programs that use the library, MSVC needs __declspec(dllimport) to
+ *  use a variable from a DLL, so the macro adds it there.  MinGW and
+ *  Cygwin import functions and variables from a DLL without it, so
+ *  programs built with them link the static or the shared library
+ *  alike.
  *
  *  CDIO_PRIVATE marks functions that are internal to one library.  It
  *  hides them from the dynamic symbol table where the compiler supports
  *  that, and does nothing on Windows, where only marked symbols are
  *  exported anyway.
  *
- *  Define CDIO_STATIC before including any libcdio header when linking
- *  the static libraries on Windows.  It makes no difference elsewhere.
+ *  With MSVC, define CDIO_STATIC before including any libcdio header
+ *  when linking the static libraries.  It makes no difference with
+ *  other compilers.
  */
 
 #ifndef CDIO_EXPORT_H_
@@ -42,7 +46,12 @@
 
 #if defined(_WIN32) || defined(__CYGWIN__)
 #  define CDIO_EXPORT __declspec(dllexport)
-#  define CDIO_IMPORT __declspec(dllimport)
+#  if defined(_MSC_VER)
+#    define CDIO_IMPORT __declspec(dllimport)
+#  else
+     /* The MinGW and Cygwin linkers import from a DLL by themselves. */
+#    define CDIO_IMPORT
+#  endif
 #  define CDIO_PRIVATE
 #elif defined(__GNUC__) && __GNUC__ >= 4
 #  define CDIO_EXPORT __attribute__((visibility("default")))

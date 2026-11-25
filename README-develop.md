@@ -66,8 +66,8 @@ with `CDIO_PUBLIC`, `ISO9660_PUBLIC` or `UDF_PUBLIC` (see
 `include/cdio/export.h`); everything else stays inside the library.
 When you add a function or variable to the API, put the right macro in
 front of its declaration. Functions only one library uses can be marked
-`CDIO_PRIVATE` in its private header. Programs that link the static
-libraries on Windows must define `CDIO_STATIC`.
+`CDIO_PRIVATE` in its private header. Programs built with MSVC that
+link the static libraries must define `CDIO_STATIC`; MinGW needs nothing.
 
 When you add a source file, test or configure check, add it to the
 `meson.build` files as well as to the Makefile.am files and configure.ac.

@@ -529,10 +529,10 @@ lib_visibility_args = []
 if not is_windows
   lib_visibility_args = cc.get_supported_arguments('-fvisibility=hidden')
 endif
-# Programs linking the static libraries on Windows must not import the
-# symbols from a DLL.
+# With MSVC, programs linking the static libraries must not import the
+# symbols from a DLL (see <cdio/export.h>).
 cdio_static_args = []
-if is_windows and get_option('default_library') == 'static'
+if is_msvc and get_option('default_library') == 'static'
   cdio_static_args = ['-DCDIO_STATIC']
 endif
 # The C++ bindings mark nothing for export, so MSVC builds them static.
