@@ -866,17 +866,18 @@ driver_return_code_t mmc_audio_get_volume (CdIo_t *p_cdio,  /*out*/
     The following variables are trickery to force the above enum symbol
     values to be recorded in debug symbol tables. They are used to
     allow one to refer to the enumeration value names in the typedefs
-    above in a debugger and debugger expressions
+    above in a debugger and debugger expressions.  A debugger reads them
+    from libcdio's own debug information, so they are not exported.
 */
-CDIO_PUBLIC extern cdio_mmc_feature_t           debug_cdio_mmc_feature;
-CDIO_PUBLIC extern cdio_mmc_feature_interface_t debug_cdio_mmc_feature_interface;
-CDIO_PUBLIC extern cdio_mmc_feature_profile_t   debug_cdio_mmc_feature_profile;
-CDIO_PUBLIC extern cdio_mmc_get_conf_t          debug_cdio_mmc_get_conf;
-CDIO_PUBLIC extern cdio_mmc_gpcmd_t             debug_cdio_mmc_gpcmd;
-CDIO_PUBLIC extern cdio_mmc_read_sub_state_t    debug_cdio_mmc_read_sub_state;
-extern cdio_mmc_read_cd_type_t      debug_cdio_mmc_read_cd_type;
-extern cdio_mmc_readtoc_t           debug_cdio_mmc_readtoc;
-extern cdio_mmc_mode_page_t         debug_cdio_mmc_mode_page;
+CDIO_PRIVATE extern cdio_mmc_feature_t           debug_cdio_mmc_feature;
+CDIO_PRIVATE extern cdio_mmc_feature_interface_t debug_cdio_mmc_feature_interface;
+CDIO_PRIVATE extern cdio_mmc_feature_profile_t   debug_cdio_mmc_feature_profile;
+CDIO_PRIVATE extern cdio_mmc_get_conf_t          debug_cdio_mmc_get_conf;
+CDIO_PRIVATE extern cdio_mmc_gpcmd_t             debug_cdio_mmc_gpcmd;
+CDIO_PRIVATE extern cdio_mmc_read_sub_state_t    debug_cdio_mmc_read_sub_state;
+CDIO_PRIVATE extern cdio_mmc_read_cd_type_t      debug_cdio_mmc_read_cd_type;
+CDIO_PRIVATE extern cdio_mmc_readtoc_t           debug_cdio_mmc_readtoc;
+CDIO_PRIVATE extern cdio_mmc_mode_page_t         debug_cdio_mmc_mode_page;
 
 #ifndef DO_NOT_WANT_OLD_MMC_COMPATIBILITY
 #define CDIO_MMC_GPCMD_START_STOP CDIO_MMC_GPCMD_START_STOP_UNIT
