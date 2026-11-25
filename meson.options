@@ -1,0 +1,50 @@
+# Build options for libcdio.  These mirror the switches accepted by the
+# autotools configure script; the configure spelling is given for each.
+
+# Programs in src/ (--without-cd-drive, --without-cd-info, ...)
+option('cd-drive', type: 'boolean', value: true,
+       description: 'Build program cd-drive')
+option('cd-info', type: 'boolean', value: true,
+       description: 'Build program cd-info')
+option('cdda-player', type: 'feature', value: 'auto',
+       description: 'Build program cdda-player (needs curses)')
+option('cd-read', type: 'boolean', value: true,
+       description: 'Build program cd-read')
+option('iso-info', type: 'boolean', value: true,
+       description: 'Build program iso-info')
+option('iso-read', type: 'boolean', value: true,
+       description: 'Build program iso-read')
+
+# Libraries and bindings
+option('versioned-libs', type: 'feature', value: 'auto',
+       description: 'Build versioned library symbols (needs a linker that takes --version-script)')
+option('cxx', type: 'boolean', value: true,
+       description: 'Build the C++ bindings libcdio++ and libiso9660++ (--disable-cxx)')
+option('joliet', type: 'boolean', value: true,
+       description: 'Include ISO-9660 Joliet extension support (--disable-joliet)')
+option('rock', type: 'boolean', value: true,
+       description: 'Include ISO-9660 Rock-Ridge extension support (--disable-rock)')
+option('compatibility', type: 'boolean', value: true,
+       description: 'Keep obsoleted libcdio APIs (--disable-compatibility)')
+
+# Optional external libraries
+option('cddb', type: 'feature', value: 'auto',
+       description: 'CDDB lookups in cd-info and cdda-player via libcddb (--enable-cddb)')
+option('vcd-info', type: 'feature', value: 'disabled',
+       description: 'Video CD info in cd-info via libvcdinfo (--enable-vcd-info)')
+
+# Examples (--disable-example-progs, --enable-cpp-progs)
+option('examples', type: 'boolean', value: true,
+       description: 'Build the example programs in example/ (several tests use them)')
+option('cpp-examples', type: 'boolean', value: false,
+       description: 'Build the C++ example programs in example/C++ (needs cxx)')
+
+# Documentation
+option('man', type: 'feature', value: 'auto',
+       description: 'Generate manual pages for the programs with help2man')
+option('info', type: 'feature', value: 'auto',
+       description: 'Build the Texinfo manual with makeinfo')
+
+# Tests
+option('tests', type: 'boolean', value: true,
+       description: 'Build the test programs and register them with meson test')
