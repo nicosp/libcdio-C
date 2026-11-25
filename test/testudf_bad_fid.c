@@ -31,7 +31,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 
 #include "../lib/driver/_cdio_stdio.h"
 #include "../lib/udf/udf_private.h"
@@ -68,8 +70,12 @@ int main(void) {
   udf_dirent_t root = {0};
   udf_short_ad_t *ad;
   const char *path = "libcdio-udf-bad-fid-XXXXXX";
-  char temp_path[sizeof("libcdio-udf-bad-fid-XXXXXX")];
-  int fd, rc = 1;
+  char temp_path[64 + L_tmpnam];
+  FILE *fp;
+#ifdef HAVE_MKSTEMP
+  int fd;
+#endif
+  int rc = 1;
 
   /* Compression ID 16 followed by three UCS-2BE bytes has an odd payload
      length, so conversion must fail. Keep the descriptor tag and CRC valid
@@ -88,16 +94,29 @@ int main(void) {
                          uint16_from_le(fid->tag.desc_CRC_len)));
   set_tag_checksum(&fid->tag);
 
+#ifdef HAVE_MKSTEMP
   strcpy(temp_path, path);
   fd = mkstemp(temp_path);
   if (fd < 0)
     return rc;
-  if (write(fd, image, sizeof(image)) != (ssize_t)sizeof(image)) {
+  fp = fdopen(fd, "wb");
+  if (!fp) {
     close(fd);
     remove(temp_path);
     return rc;
   }
-  close(fd);
+#else
+  /* No mkstemp (MSVC): fall back to tmpnam. */
+  (void) path;
+  if (!tmpnam(temp_path) || !(fp = fopen(temp_path, "wb")))
+    return rc;
+#endif
+  if (fwrite(image, 1, sizeof(image), fp) != sizeof(image)) {
+    fclose(fp);
+    remove(temp_path);
+    return rc;
+  }
+  fclose(fp);
 
   udf.b_stream = true;
   udf.stream = cdio_stdio_new(temp_path);
