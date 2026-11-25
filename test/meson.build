@@ -32,6 +32,7 @@ test_programs = {
   'test_lib_driver_util': [libcdio_dep, [], []],
   'testudf': [libudf_dep, [], []],
   'testudf_ad': [libudf_dep, [], [include_directories('../lib/udf')]],
+  'testudf_bad_fid': [libudf_dep, [], [include_directories('../lib/udf')]],
   'testudf_efe': [libudf_dep, [], []],
   'testpregap': [libcdio_dep, [], []],
 }
