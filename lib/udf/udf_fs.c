@@ -67,12 +67,13 @@
    have to come *before* #include <cdio/ecma_167.h> which sets
    #defines for these.
 */
-const char VSD_STD_ID_BEA01[] = {'B', 'E', 'A', '0', '1'};
-const char VSD_STD_ID_BOOT2[] = {'B', 'O', 'O', 'T', '2'};
-const char VSD_STD_ID_CD001[] = {'C', 'D', '0', '0', '1'};
-const char VSD_STD_ID_CDW01[] = {'C', 'D', 'W', '0', '2'};
-const char VSD_STD_ID_NSR03[] = {'N', 'S', 'R', '0', '3'};
-const char VSD_STD_ID_TEA01[] = {'T', 'E', 'A', '0', '1'};
+#include <cdio/export.h>  /* UDF_PUBLIC; MSVC needs it on these definitions */
+UDF_PUBLIC const char VSD_STD_ID_BEA01[] = {'B', 'E', 'A', '0', '1'};
+UDF_PUBLIC const char VSD_STD_ID_BOOT2[] = {'B', 'O', 'O', 'T', '2'};
+UDF_PUBLIC const char VSD_STD_ID_CD001[] = {'C', 'D', '0', '0', '1'};
+UDF_PUBLIC const char VSD_STD_ID_CDW01[] = {'C', 'D', 'W', '0', '2'};
+UDF_PUBLIC const char VSD_STD_ID_NSR03[] = {'N', 'S', 'R', '0', '3'};
+UDF_PUBLIC const char VSD_STD_ID_TEA01[] = {'T', 'E', 'A', '0', '1'};
 
 #include <cdio/bytesex.h>
 #include <cdio/utf8.h>

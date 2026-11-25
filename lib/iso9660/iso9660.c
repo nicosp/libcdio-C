@@ -20,9 +20,11 @@
 /** String inside frame which identifies an ISO 9660 filesystem. This
     string is the "id" field of an iso9660_pvd_t or an iso9660_svd_t.
     Note should come *before* #include <cdio/iso9660.h> which does
-    a #define of this name.
+    a #define of this name.  It needs ISO9660_PUBLIC itself, as MSVC
+    rejects a dllexport declaration after a plain definition.
 */
-const char ISO_STANDARD_ID[] = {'C', 'D', '0', '0', '1'};
+#include <cdio/export.h>
+ISO9660_PUBLIC const char ISO_STANDARD_ID[] = {'C', 'D', '0', '0', '1'};
 
 /* Private headers */
 #include "iso9660_private.h"
