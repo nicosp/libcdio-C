@@ -57,5 +57,12 @@ jobs:
         TEST
         gcc -Iinclude -o link-static.exe link-test.c lib/driver/.libs/libcdio.a -liconv -lwinmm
         ./link-static.exe
+        # The static library must not make the program export libcdio's
+        # functions.
+        if objdump -p link-static.exe | grep -q 'cdio_'; then
+          echo "link-static.exe exports or imports libcdio symbols:"
+          objdump -p link-static.exe | grep 'cdio_'
+          exit 1
+        fi
         gcc -Iinclude -o link-shared.exe link-test.c lib/driver/.libs/libcdio.dll.a
         PATH="$PWD/lib/driver/.libs:$PATH" ./link-shared.exe

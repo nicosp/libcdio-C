@@ -64,7 +64,7 @@ jobs:
       run: meson test -C build --print-errorlogs
 
   mingw:
-    # Meson with MinGW: GNU ld on Windows, which the MSVC jobs do not use.
+    # GNU ld on Windows: separate DLL and static objects, version scripts.
     strategy:
       fail-fast: false
       matrix:

@@ -63,6 +63,15 @@
 #  define CDIO_PRIVATE
 #endif
 
+/* On Windows libtool compiles a library's sources twice, defining
+   DLL_EXPORT only for the DLL.  The static library's objects must not
+   export anything, or every program linked with them would re-export
+   libcdio's functions. */
+#if defined(CDIO_LIBTOOL) && (defined(_WIN32) || defined(__CYGWIN__)) \
+    && !defined(DLL_EXPORT) && !defined(CDIO_STATIC)
+#  define CDIO_STATIC 1
+#endif
+
 #if defined(CDIO_STATIC)
 #  define CDIO_PUBLIC
 #  define ISO9660_PUBLIC

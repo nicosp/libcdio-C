@@ -65,7 +65,7 @@ libiso9660_la_LIBADD = @LIBCDIO_LIBS@
 libiso9660_la_ldflags = -version-info $(libiso9660_la_CURRENT):$(libiso9660_la_REVISION):$(libiso9660_la_AGE) @LT_NO_UNDEFINED@
 libiso9660_la_dependencies = $(top_builddir)/lib/driver/libcdio.la
 
-AM_CPPFLAGS = $(LIBCDIO_CFLAGS) -DCDIO_BUILDING_LIBISO9660
+AM_CPPFLAGS = $(LIBCDIO_CFLAGS) -DCDIO_BUILDING_LIBISO9660 -DCDIO_LIBTOOL
 AM_CFLAGS = $(VISIBILITY_CFLAGS)
 
 ########################################################

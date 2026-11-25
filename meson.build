@@ -535,6 +535,14 @@ cdio_static_args = []
 if is_msvc and get_option('default_library') == 'static'
   cdio_static_args = ['-DCDIO_STATIC']
 endif
+# On Windows, objects for the static libraries must not carry dllexport
+# (a program linked with them would re-export libcdio's functions), so
+# there the DLL and the static library are compiled separately: the
+# DLL's objects with CDIO_BUILDING_*, the static library's with
+# CDIO_STATIC.  Elsewhere one set of objects serves both.
+split_static = is_windows and get_option('default_library') == 'both'
+windows_static_only = is_windows and get_option('default_library') == 'static'
+
 # The C++ bindings mark nothing for export, so MSVC builds them static.
 lib_type_cxx = is_msvc ? 'static_library' : 'library'
 

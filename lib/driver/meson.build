@@ -58,18 +58,33 @@ endif
 
 libcdio_deps = [iconv_dep, os_deps, extra_deps]
 
-libcdio = build_target('cdio',
-  libcdio_sources, version_h,
-  target_type: lib_type,
-  version: '@0@.@1@.@2@'.format(libcdio_major, libcdio_age, libcdio_revision),
-  soversion: libcdio_major,
-  include_directories: [top_inc, include_inc, driver_inc],
-  c_args: libcdio_c_args + lib_visibility_args + ['-DCDIO_BUILDING_LIBCDIO'],
-  link_args: libcdio_link_args,
-  link_depends: libcdio_link_depends,
-  dependencies: libcdio_deps,
-  install: true,
-)
+libcdio_common = {
+  'include_directories': [top_inc, include_inc, driver_inc],
+  'dependencies': libcdio_deps,
+  'install': true,
+}
+libcdio_shared_kwargs = {
+  'version': '@0@.@1@.@2@'.format(libcdio_major, libcdio_age, libcdio_revision),
+  'soversion': libcdio_major,
+  'link_args': libcdio_link_args,
+  'link_depends': libcdio_link_depends,
+}
+libcdio_build_args = libcdio_c_args + lib_visibility_args + ['-DCDIO_BUILDING_LIBCDIO']
+libcdio_static_args = libcdio_c_args + ['-DCDIO_STATIC']
+
+if split_static
+  libcdio = shared_library('cdio', libcdio_sources, version_h,
+    c_args: libcdio_build_args,
+    kwargs: libcdio_common + libcdio_shared_kwargs)
+  static_library('cdio', libcdio_sources, version_h,
+    c_args: libcdio_static_args,
+    kwargs: libcdio_common)
+else
+  libcdio = build_target('cdio', libcdio_sources, version_h,
+    target_type: lib_type,
+    c_args: windows_static_only ? libcdio_static_args : libcdio_build_args,
+    kwargs: libcdio_common + libcdio_shared_kwargs)
+endif
 
 libcdio_dep = declare_dependency(
   link_with: libcdio,

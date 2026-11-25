@@ -108,7 +108,7 @@ libcdio_la_LIBADD  = $(LTLIBICONV)
 libcdio_la_SOURCES = $(libcdio_sources)
 libcdio_la_ldflags = -version-info $(libcdio_la_CURRENT):$(libcdio_la_REVISION):$(libcdio_la_AGE) @LT_NO_UNDEFINED@ $(DARWIN_PKG_LIB_HACK)
 
-AM_CPPFLAGS = $(LIBCDIO_CFLAGS) -DCDIO_BUILDING_LIBCDIO
+AM_CPPFLAGS = $(LIBCDIO_CFLAGS) -DCDIO_BUILDING_LIBCDIO -DCDIO_LIBTOOL
 AM_CFLAGS = $(VISIBILITY_CFLAGS)
 
 ########################################################
