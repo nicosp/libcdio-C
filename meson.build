@@ -6,7 +6,7 @@
 #   meson compile -C build
 #   meson test -C build
 #
-# Copyright (C) 2026 Rocky Bernstein <rocky@gnu.org>
+# Copyright (C) 2026 Nicos Panayides
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
