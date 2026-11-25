@@ -550,7 +550,6 @@ subst.set('DIFF_OPTS', ' '.join(diff_opts))
 subst.set('GREP', grep_cmd)
 subst.set('HAVE_ROCK', enable_rock ? '1' : '')
 subst.set('HAVE_JOLIET', enable_joliet ? '1' : '')
-subst.set('MINGW32', system == 'windows' and not is_msvc ? '1' : '')
 subst.set('VCDINFO_LIBS', vcdinfo_dep.found() ? '-lvcdinfo' : '')
 subst.set('ISO_MAKING_COMMAND', iso_cmd)
 
