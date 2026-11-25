@@ -117,7 +117,7 @@ endif
 # Headers
 # ---------------------------------------------------------------------
 
-if not cc.has_header('stdbool.h')
+if not cc.check_header('stdbool.h')
   error('Couldn\'t find or include stdbool.h')
 endif
 
@@ -130,14 +130,14 @@ foreach h : [
     'stdarg.h', 'stdbool.h', 'sys/cdio.h', 'sys/param.h', 'sys/time.h',
     'sys/timeb.h', 'sys/utsname.h', 'getopt.h',
   ]
-  conf.set('HAVE_' + h.underscorify().to_upper(), cc.has_header(h) ? 1 : false)
+  conf.set('HAVE_' + h.underscorify().to_upper(), cc.check_header(h) ? 1 : false)
 endforeach
 
 if system == 'windows' or system == 'cygwin'
   foreach h : ['ntddcdrm.h', 'ddk/ntddcdrm.h', 'ntddscsi.h',
                'ddk/ntddscsi.h', 'ddk/scsi.h']
     conf.set('HAVE_' + h.underscorify().to_upper(),
-             cc.has_header(h, prefix: '#include <windows.h>') ? 1 : false)
+             cc.check_header(h, prefix: '#include <windows.h>') ? 1 : false)
   endforeach
 endif
 
@@ -172,7 +172,7 @@ if not cc.compiles('static inline int f(void) { return 0; }', name: 'inline')
   endforeach
 endif
 
-stat_prefix = cc.has_header('sys/stat.h') ? '#include <sys/stat.h>\n' : ''
+stat_prefix = cc.check_header('sys/stat.h') ? '#include <sys/stat.h>\n' : ''
 if cc.links(stat_prefix + 'int main(void) { return S_ISLNK(0); }',
             name: 'S_ISLNK() macro')
   conf.set('HAVE_S_ISLNK', '')
@@ -286,7 +286,7 @@ libcdio_c_args = []
 enable_cdda_player_os = true
 
 if system == 'darwin'
-  if cc.has_header('IOKit/IOKitLib.h') and cc.has_header('CoreFoundation/CFBase.h')
+  if cc.check_header('IOKit/IOKitLib.h') and cc.check_header('CoreFoundation/CFBase.h')
     conf.set('HAVE_IOKIT_IOKITLIB_H', 1)
     conf.set('HAVE_COREFOUNDATION_CFBASE_H', 1)
     conf.set('HAVE_DARWIN_CDROM', 1)
@@ -302,9 +302,9 @@ if system == 'darwin'
     cd_drivers += 'Darwin'
   endif
 elif system == 'linux' or system == 'android'
-  conf.set('HAVE_LINUX_VERSION_H', cc.has_header('linux/version.h') ? 1 : false)
-  conf.set('HAVE_LINUX_MAJOR_H', cc.has_header('linux/major.h') ? 1 : false)
-  if cc.has_header('linux/cdrom.h')
+  conf.set('HAVE_LINUX_VERSION_H', cc.check_header('linux/version.h') ? 1 : false)
+  conf.set('HAVE_LINUX_MAJOR_H', cc.check_header('linux/major.h') ? 1 : false)
+  if cc.check_header('linux/cdrom.h')
     conf.set('HAVE_LINUX_CDROM_H', 1)
     if cc.has_member('struct cdrom_generic_command', 'timeout',
                      prefix: '#include <linux/cdrom.h>')
@@ -323,7 +323,7 @@ elif system == 'cygwin'
   os_deps += cc.find_library('winmm')
   cd_drivers += 'MinGW'
 elif system == 'windows' and is_msvc
-  conf.set('HAVE_WINDOWS_H', cc.has_header('windows.h') ? 1 : false)
+  conf.set('HAVE_WINDOWS_H', cc.check_header('windows.h') ? 1 : false)
   conf.set('HAVE_WIN32_CDROM', 1)
   os_deps += cc.find_library('winmm')
   cd_drivers += 'Win32'
@@ -335,7 +335,7 @@ elif system == 'windows'
                              #endif''',
                           name: 'MinGW-w64 headers')
   conf.set('MINGW_W64_HEADERS', mingw_w64 ? 1 : false)
-  conf.set('HAVE_WINDOWS_H', cc.has_header('windows.h') ? 1 : false)
+  conf.set('HAVE_WINDOWS_H', cc.check_header('windows.h') ? 1 : false)
   conf.set('MINGW32', 1)
   conf.set('HAVE_WIN32_CDROM', 1)
   os_deps += cc.find_library('winmm')
@@ -428,7 +428,7 @@ endif
 if cdda_player_opt.allowed()
   have_curses_header = false
   foreach h : ['ncurses.h', 'curses.h', 'ncurses/ncurses.h']
-    if not have_curses_header and cc.has_header(h)
+    if not have_curses_header and cc.check_header(h)
       conf.set('HAVE_' + h.underscorify().to_upper(), 1)
       have_curses_header = true
     endif
