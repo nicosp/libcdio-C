@@ -498,6 +498,13 @@ if is_msvc
               name: '_alloca')
     conf.set('alloca', '_alloca')
   endif
+  # The examples and programs call ftruncate; the CRT calls it _chsize.
+  # lib/driver/portable.h does the same for the library.
+  if (not cc.has_function('ftruncate', args: project_args,
+                          prefix: function_check_prefix)
+      and cc.has_function('_chsize', prefix: function_check_prefix))
+    conf.set('ftruncate', '_chsize')
+  endif
 endif
 
 configure_file(output: 'config.h', configuration: conf)
