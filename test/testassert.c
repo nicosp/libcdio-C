@@ -22,9 +22,24 @@
 /* Private headers */
 #include "cdio_assert.h"
 
+#ifdef _MSC_VER
+#include <crtdbg.h>
+#include <stdlib.h>
+#endif
+
 int
 main (int argc, const char *argv[])
 {
+#ifdef _MSC_VER
+  /* MSVC's debug runtime reports a failed assertion in a dialog box
+     that waits for a click; write the report to stderr instead. */
+  _CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_FILE);
+  _CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR);
+  _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_FILE);
+  _CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
+  _set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
+#endif
+
   cdio_assert (argc < 2);
 
   cdio_assert_not_reached ();

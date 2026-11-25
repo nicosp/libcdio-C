@@ -60,7 +60,7 @@
 
 #include <cdio/util.h>
 
-#ifdef MINGW32
+#if defined(_WIN32) && !defined(__CYGWIN__)
 #define MY_DIR_SEPARATOR '\\'
 #else
 #define MY_DIR_SEPARATOR '/'

@@ -1,4 +1,4 @@
-test_srcdir = meson.current_source_dir()
+test_srcdir = abs_srcdir / 'test'
 test_data_dir = test_srcdir / 'data'
 test_c_args = ['-DDATA_DIR="@0@"'.format(test_data_dir)]
 test_inc = [top_inc, include_directories('../lib/iso9660')]
@@ -57,10 +57,10 @@ subdir('driver')
 sh = find_program('sh', required: false)
 script_env = environment({
   'srcdir': test_srcdir,
-  'top_srcdir': meson.project_source_root(),
-  'abs_top_srcdir': meson.project_source_root(),
-  'top_builddir': meson.project_build_root(),
-  'abs_top_builddir': meson.project_build_root(),
+  'top_srcdir': abs_srcdir,
+  'abs_top_srcdir': abs_srcdir,
+  'top_builddir': abs_builddir,
+  'abs_top_builddir': abs_builddir,
 })
 
 regression_scripts = []

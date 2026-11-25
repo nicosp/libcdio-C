@@ -32,7 +32,7 @@ example_programs = {
 # The examples make check runs, with any arguments they need.  The
 # examples default to images found by a path relative to an in-tree
 # build, so the tests name the image explicitly.
-test_data_dir = meson.project_source_root() / 'test' / 'data'
+test_data_dir = abs_srcdir / 'test' / 'data'
 example_tests = {
   'device': [],
   'drives': [],
