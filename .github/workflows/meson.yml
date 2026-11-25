@@ -62,3 +62,36 @@ jobs:
 
     - name: Test
       run: meson test -C build --print-errorlogs
+
+  mingw:
+    # Meson with MinGW: GNU ld on Windows, which the MSVC jobs do not use.
+    strategy:
+      fail-fast: false
+      matrix:
+        sys: [mingw64, ucrt64]
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+    - uses: actions/checkout@v7
+
+    - uses: msys2/setup-msys2@v2
+      with:
+        msystem: ${{ matrix.sys }}
+        update: true
+        pacboy: >-
+          toolchain:p
+          meson:p
+          ninja:p
+          libiconv:p
+          ncurses:p
+
+    - name: Build
+      run: |
+        meson setup build
+        meson compile -C build
+
+    - name: Test
+      run: meson test -C build --print-errorlogs
