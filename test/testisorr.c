@@ -192,7 +192,7 @@ add_directory_record(uint8_t *dir, unsigned offset, uint32_t extent,
 static int
 check_excessive_path_depth(void)
 {
-  const unsigned depth = 300;
+  enum { depth = 300 };  /* a constant expression, so path is not a VLA */
   uint8_t pvd[ISO_BLOCKSIZE] = {0};
   uint8_t dir[ISO_BLOCKSIZE] = {0};
   char path[depth * 2];
@@ -282,31 +282,49 @@ out:
   return ret;
 }
 
+/* Opens a new temporary file for writing. psz_tmp receives its name. */
+static FILE *
+open_temp(char *psz_tmp, const char *psz_template)
+{
+#ifdef HAVE_MKSTEMP
+  int fd;
+  FILE *fp;
+
+  strcpy(psz_tmp, psz_template);
+  fd = mkstemp(psz_tmp);
+  if (fd < 0)
+    return NULL;
+  fp = fdopen(fd, "wb");
+  if (!fp)
+    close(fd);
+  return fp;
+#else
+  (void) psz_template;
+  if (!tmpnam(psz_tmp))
+    return NULL;
+  return fopen(psz_tmp, "wb");
+#endif
+}
+
 static int
 check_malformed_record(void)
 {
   const char *source_name = DATA_DIR "/bad-dir.iso";
-  char temp_name[] = "libcdio-malformed-rr-XXXXXX";
+  char temp_name[64 + L_tmpnam];
   FILE *source = NULL;
   FILE *temp = NULL;
   iso9660_t *p_iso = NULL;
   uint8_t buffer[4096];
   size_t nread;
-  int fd;
   int result = 1;
 
+  temp_name[0] = '\0';
   source = fopen(source_name, "rb");
-  fd = mkstemp(temp_name);
-  if (!source || fd < 0) {
-    if (fd >= 0)
-      close(fd);
+  if (!source)
     goto out;
-  }
-  temp = fdopen(fd, "wb+");
-  if (!temp) {
-    close(fd);
+  temp = open_temp(temp_name, "libcdio-malformed-rr-XXXXXX");
+  if (!temp)
     goto out;
-  }
 
   while ((nread = fread(buffer, 1, sizeof(buffer), source)) != 0) {
     if (fwrite(buffer, 1, nread, temp) != nread)
@@ -335,30 +353,6 @@ out:
     fclose(source);
   remove(temp_name);
   return result;
-}
-
-/* Opens a new temporary file for writing. psz_tmp receives its name. */
-static FILE *
-open_temp(char *psz_tmp, const char *psz_template)
-{
-#ifdef HAVE_MKSTEMP
-  int fd;
-  FILE *fp;
-
-  strcpy(psz_tmp, psz_template);
-  fd = mkstemp(psz_tmp);
-  if (fd < 0)
-    return NULL;
-  fp = fdopen(fd, "wb");
-  if (!fp)
-    close(fd);
-  return fp;
-#else
-  (void) psz_template;
-  if (!tmpnam(psz_tmp))
-    return NULL;
-  return fopen(psz_tmp, "wb");
-#endif
 }
 
 #define TEST_IMAGE_BLOCKS 40

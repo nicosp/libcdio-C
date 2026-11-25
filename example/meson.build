@@ -46,7 +46,15 @@ example_tests = {
 
 examples = {}
 example_targets = []
+# audio uses the system getopt, which MSVC does not have; the programs
+# in src/ carry their own.
+have_getopt = cc.has_function('getopt', prefix: '#include <stdlib.h>\n' +
+                              (cc.has_header('unistd.h') ? '#include <unistd.h>' : ''))
+
 foreach name, deps : example_programs
+  if name == 'audio' and not have_getopt
+    continue
+  endif
   exe = executable(name, name + '.c',
     include_directories: top_inc,
     dependencies: deps,
