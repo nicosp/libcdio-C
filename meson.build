@@ -39,9 +39,9 @@ cc = meson.get_compiler('c')
 system = host_machine.system()
 
 # Microsoft's compiler (cl, or clang-cl).  config.h comes from the same
-# checks as everywhere else; .vs/unistd.h stands in for the missing
-# POSIX header, Win32 calls replace iconv, and the libraries are static
-# because nothing in libcdio is marked __declspec(dllexport).  To link
+# checks as everywhere else; Win32 calls replace iconv, and the
+# libraries are static because nothing in libcdio is marked
+# __declspec(dllexport).  To link
 # the C runtime statically as libcdio.sln does, pass
 # -Db_vscrt=static_from_buildtype.
 is_msvc = cc.get_argument_syntax() == 'msvc'
@@ -196,6 +196,23 @@ endif
 m_dep = cc.find_library('m', required: false)
 extra_deps = [m_dep]
 
+# The Microsoft C runtime defines snprintf, vsnprintf and others inline
+# in its headers, so look for them through the headers there.  Other
+# compilers keep autoconf's link-only check, which finds functions that
+# a header hides without a feature macro.
+function_check_prefix = ''
+if is_msvc
+  function_check_prefix = '''
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <io.h>
+#include <direct.h>
+#include <sys/stat.h>
+'''
+endif
+
 foreach f : ['chdir', 'drand48', 'fseeko', 'fseeko64', 'ftruncate',
              'geteuid', 'getgid', 'getuid', 'getpwuid', 'gettimeofday',
              'lseek64', 'lstat', 'memcpy', 'memset', 'mkstemp', 'rand',
@@ -204,7 +221,8 @@ foreach f : ['chdir', 'drand48', 'fseeko', 'fseeko64', 'ftruncate',
              'vsnprintf', 'readlink', 'realpath', 'gmtime_r',
              'localtime_r', 'strtok_r', 'timegm']
   conf.set('HAVE_' + f.to_upper(),
-           cc.has_function(f, args: project_args) ? 1 : false)
+           cc.has_function(f, args: project_args,
+                           prefix: function_check_prefix) ? 1 : false)
 endforeach
 
 # AC_STRUCT_TIMEZONE
@@ -305,6 +323,7 @@ elif system == 'cygwin'
   os_deps += cc.find_library('winmm')
   cd_drivers += 'MinGW'
 elif system == 'windows' and is_msvc
+  conf.set('HAVE_WINDOWS_H', cc.has_header('windows.h') ? 1 : false)
   conf.set('HAVE_WIN32_CDROM', 1)
   os_deps += cc.find_library('winmm')
   cd_drivers += 'Win32'
@@ -474,10 +493,6 @@ if enable_cxx
 endif
 
 if is_msvc
-  # Sources include <unistd.h> unconditionally; .vs/unistd.h supplies
-  # the ssize_t and mode_t they want from it.
-  configure_file(input: '.vs/unistd.h', output: 'unistd.h', copy: true)
-  conf.set('HAVE_UNISTD_H', 1)
   if cc.links('''#include <malloc.h>
                  int main(void) { char *p = _alloca(4); return p == 0; }''',
               name: '_alloca')
