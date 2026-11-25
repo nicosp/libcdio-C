@@ -34,3 +34,30 @@ shell script:
     sh ./autogen.sh
 
 Please see [README-libcdio.md](README-libcdio.md) and follow those instructions starting at step 3.
+
+## Building with Meson
+
+There is also a Meson build, which runs alongside the autotools one and
+needs neither autogen.sh nor the autotools. You need Meson 1.3.0 or
+later and Ninja:
+
+    meson setup build
+    meson compile -C build
+    meson test -C build
+    meson install -C build
+
+`meson configure build` lists the options. Most mirror a configure
+switch, for example `-Dcxx=false` for `--disable-cxx`, `-Dcddb=disabled`
+for `--disable-cddb` and `-Dcd-info=false` for `--without-cd-info`.
+Tests are grouped into the suites `lib`, `driver`, `example` and
+`regression`; run one with `meson test -C build --suite regression`.
+`meson compile -C build doxygen` builds the API reference when Doxygen
+is installed.
+
+With Microsoft's compiler, run the same commands from a Visual Studio
+developer prompt. The libraries are built static, since libcdio marks
+no symbols for export from a DLL. To link the C runtime statically as
+libcdio.sln does, add `-Db_vscrt=static_from_buildtype`.
+
+When you add a source file, test or configure check, add it to the
+`meson.build` files as well as to the Makefile.am files and configure.ac.

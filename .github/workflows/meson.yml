@@ -1,0 +1,63 @@
+name: Meson
+
+on: [push, pull_request]
+
+jobs:
+  unix:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v7
+
+    - name: Setup (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y meson ninja-build libncurses-dev help2man texinfo genisoimage
+
+    - name: Setup (macOS)
+      if: runner.os == 'macOS'
+      run: brew install meson ninja help2man texinfo
+
+    - name: Build
+      run: |
+        meson setup build
+        meson compile -C build
+
+    - name: Test
+      run: meson test -C build --print-errorlogs
+
+  msvc:
+    # Microsoft's compiler, configured the way libcdio.sln builds.
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [x64, x86]
+        buildtype: [debug, release]
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v7
+
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.x'
+
+    - name: Setup
+      run: pip install meson ninja
+
+    - uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: ${{ matrix.arch }}
+
+    - name: Build
+      run: |
+        meson setup build --buildtype=${{ matrix.buildtype }}
+        meson compile -C build
+
+    - name: Test
+      run: meson test -C build --print-errorlogs

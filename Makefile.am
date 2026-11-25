@@ -43,6 +43,27 @@ EXTRA_DIST = \
 	libudf.pc.in \
 	make-check-filter.pl \
 	make-check-filter.rb \
+	meson.build \
+	meson.options \
+	doc/meson.build \
+	doc/version.texi.in \
+	doc/doxygen/meson.build \
+	example/meson.build \
+	example/C++/meson.build \
+	example/C++/OO/meson.build \
+	include/meson.build \
+	include/cdio/meson.build \
+	include/cdio++/meson.build \
+	lib/meson.build \
+	lib/version-script.in \
+	lib/cdio++/meson.build \
+	lib/driver/meson.build \
+	lib/iso9660/meson.build \
+	lib/udf/meson.build \
+	src/meson.build \
+	test/meson.build \
+	test/data/meson.build \
+	test/driver/meson.build \
 	package/libcdio.spec.in \
 	test/README.multiextent \
 	$(wildcard test/data/*.bin) \
