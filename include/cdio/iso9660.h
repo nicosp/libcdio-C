@@ -82,7 +82,7 @@ typedef char     dchar_t;  /** See section 7.4.1 */
     expression and get something. With the more common \#define
     mechanism, the name/value association is lost at runtime.
   */
-ISO9660_PUBLIC extern enum iso_enum1_s {
+CDIO_PRIVATE extern enum iso_enum1_s {
   ISO_PVD_SECTOR      =   16, /**< Sector of Primary Volume Descriptor. */
   ISO_EVD_SECTOR      =   17, /**< Sector of End Volume Descriptor. */
   LEN_ISONAME         =   31, /**< Size in bytes of the filename
@@ -106,7 +106,7 @@ ISO9660_PUBLIC extern enum iso_enum1_s {
   */
 
 /** ISO 9660 directory flags. */
-ISO9660_PUBLIC extern enum iso_flag_enum_s {
+CDIO_PRIVATE extern enum iso_flag_enum_s {
   ISO_FILE            =   0,   /**<  Not really a flag...                */
   ISO_EXISTENCE       =   1,   /**< Do not make existence known (hidden) */
   ISO_DIRECTORY       =   2,   /**< This file is a directory             */
@@ -119,7 +119,7 @@ ISO9660_PUBLIC extern enum iso_flag_enum_s {
 } iso_flag_enums;
 
 /** Volume descriptor types */
-ISO9660_PUBLIC extern enum iso_vd_enum_s {
+CDIO_PRIVATE extern enum iso_vd_enum_s {
   ISO_VD_BOOT_RECORD   =  0,  /**< CD is bootable */
   ISO_VD_PRIMARY       =  1,  /**< Is in any ISO-9660 */
   ISO_VD_SUPPLEMENTARY =  2,  /**< Used by Joliet, for example */
@@ -579,7 +579,7 @@ typedef uint8_t iso_extension_mask_t;
     to be helpful in debuggers where wants just to refer to the
     ISO_EXTENSION_*_ names and get something.
   */
-ISO9660_PUBLIC extern enum iso_extension_enum_s {
+CDIO_PRIVATE extern enum iso_extension_enum_s {
   ISO_EXTENSION_JOLIET_LEVEL1 = 0x01,
   ISO_EXTENSION_JOLIET_LEVEL2 = 0x02,
   ISO_EXTENSION_JOLIET_LEVEL3 = 0x04,

@@ -69,7 +69,7 @@ typedef enum {
     be recorded in debug symbol tables. It is used to allow one refer
     to above enumeration values in a debugger and debugger
     expressions */
-UDF_PUBLIC extern udf_enum1_t debug_udf_enum1;
+CDIO_PRIVATE extern udf_enum1_t debug_udf_enum1;
 
 #ifdef __cplusplus
 extern "C" {

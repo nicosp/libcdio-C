@@ -42,7 +42,7 @@ extern "C" {
   be helpful in debuggers where wants just to refer to the ISO_ROCK_*
   names and get something.
 */
-ISO9660_PUBLIC extern enum iso_rock_enums {
+CDIO_PRIVATE extern enum iso_rock_enums {
   ISO_ROCK_IRUSR  = 000400,   /**< read permission (owner) */
   ISO_ROCK_IWUSR  = 000200,   /**< write permission (owner) */
   ISO_ROCK_IXUSR  = 000100,   /**< execute permission (owner) */
@@ -392,9 +392,9 @@ ISO9660_PUBLIC const char *iso9660_get_rock_attr_str(posix_mode_t st_mode);
     by letting us use enumerations values (which also correspond to
     \#define's inside a debugged program.
  */
-ISO9660_PUBLIC extern iso_rock_nm_flag_t iso_rock_nm_flag;
-ISO9660_PUBLIC extern iso_rock_sl_flag_t iso_rock_sl_flag;
-ISO9660_PUBLIC extern iso_rock_tf_flag_t iso_rock_tf_flag;
+CDIO_PRIVATE extern iso_rock_nm_flag_t iso_rock_nm_flag;
+CDIO_PRIVATE extern iso_rock_sl_flag_t iso_rock_sl_flag;
+CDIO_PRIVATE extern iso_rock_tf_flag_t iso_rock_tf_flag;
 
 #ifdef __cplusplus
 }

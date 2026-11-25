@@ -1035,11 +1035,11 @@ PRAGMA_END_PACKED
     allow one refer to the enumeration value names in the typedefs
     above in a debugger and in debugger expressions.
 */
-UDF_PUBLIC extern tag_id_t                 debug_tagid;
-UDF_PUBLIC extern file_characteristics_t   debug_file_characteristics;
-UDF_PUBLIC extern icbtag_file_type_enum_t  debug_icbtag_file_type_enum;
-UDF_PUBLIC extern icbtag_flag_enum_t       debug_flag_enum;
-UDF_PUBLIC extern ecma_167_enum1_t         debug_ecma_167_enum1;
-UDF_PUBLIC extern ecma_167_timezone_enum_t debug_ecma_167_timezone_enum;
+CDIO_PRIVATE extern tag_id_t                 debug_tagid;
+CDIO_PRIVATE extern file_characteristics_t   debug_file_characteristics;
+CDIO_PRIVATE extern icbtag_file_type_enum_t  debug_icbtag_file_type_enum;
+CDIO_PRIVATE extern icbtag_flag_enum_t       debug_flag_enum;
+CDIO_PRIVATE extern ecma_167_enum1_t         debug_ecma_167_enum1;
+CDIO_PRIVATE extern ecma_167_timezone_enum_t debug_ecma_167_timezone_enum;
 
 #endif /* CDIO_ECMA_167_H */
