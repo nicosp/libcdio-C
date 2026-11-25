@@ -516,6 +516,18 @@ top_inc = include_directories('.')
 include_inc = include_directories('include')
 driver_inc = include_directories('lib/driver')
 
+# Absolute paths handed to tests and shell scripts, with forward
+# slashes: on Windows meson gives backslashes, which C string literals
+# and the shell treat as escapes.
+abs_srcdir = meson.project_source_root().replace('\\', '/')
+abs_builddir = meson.project_build_root().replace('\\', '/')
+
+# The scripts use these commands unquoted, so give the name meson found
+# on PATH rather than a full path that may contain spaces.
+diff_cmd = diff.found() ? fs.name(diff.full_path()) : 'no'
+grep_cmd = grep.found() ? fs.name(grep.full_path()) : 'no'
+iso_cmd = iso_making_command.found() ? fs.name(iso_making_command.full_path()) : ''
+
 # Substitutions shared by the .in files that autotools also processes.
 subst = configuration_data()
 subst.set('PACKAGE', meson.project_name())
@@ -528,20 +540,19 @@ subst.set('prefix', get_option('prefix'))
 subst.set('exec_prefix', '${prefix}')
 subst.set('libdir', '${exec_prefix}' / get_option('libdir'))
 subst.set('includedir', '${prefix}' / get_option('includedir'))
-subst.set('abs_top_srcdir', meson.project_source_root())
-subst.set('abs_top_builddir', meson.project_build_root())
+subst.set('abs_top_srcdir', abs_srcdir)
+subst.set('abs_top_builddir', abs_builddir)
 subst.set('EXEEXT', system == 'windows' or system == 'cygwin' ? '.exe' : '')
 subst.set('SHELL', '/bin/sh')
 subst.set('RM', 'rm -f')
-subst.set('DIFF', diff.found() ? diff.full_path() : 'no')
+subst.set('DIFF', diff_cmd)
 subst.set('DIFF_OPTS', ' '.join(diff_opts))
-subst.set('GREP', grep.found() ? grep.full_path() : 'no')
+subst.set('GREP', grep_cmd)
 subst.set('HAVE_ROCK', enable_rock ? '1' : '')
 subst.set('HAVE_JOLIET', enable_joliet ? '1' : '')
 subst.set('MINGW32', system == 'windows' and not is_msvc ? '1' : '')
 subst.set('VCDINFO_LIBS', vcdinfo_dep.found() ? '-lvcdinfo' : '')
-subst.set('ISO_MAKING_COMMAND',
-          iso_making_command.found() ? iso_making_command.full_path() : '')
+subst.set('ISO_MAKING_COMMAND', iso_cmd)
 
 subdir('include')
 subdir('lib')
