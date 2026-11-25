@@ -57,7 +57,8 @@ jobs:
     - name: Build
       run: |
         meson setup build --buildtype=${{ matrix.buildtype }}
-        meson compile -C build
+        # Keep going after errors so one run reports all of them.
+        meson compile -C build --ninja-args=-k0
 
     - name: Test
       run: meson test -C build --print-errorlogs

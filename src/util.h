@@ -90,7 +90,7 @@
    if (opts.debug_level >= level) \
      report(stderr, "%s: "s, __func__ , __VA_ARGS__)
 #else
-#define dbg_print(level, s, args...)
+#define dbg_print(level, s, ...)
 #endif
 
 #define err_exit(fmt, ...) \
