@@ -81,6 +81,8 @@ jobs:
       with:
         msystem: ${{ matrix.sys }}
         update: true
+        # diffutils: the regression scripts skip themselves without diff.
+        install: diffutils
         pacboy: >-
           toolchain:p
           meson:p
