@@ -253,7 +253,17 @@ endif
 if is_msvc
   iconv_dep = dependency('', required: false)
 else
-  iconv_dep = dependency('iconv', required: true)
+  iconv_dep = dependency('iconv', required: false)
+  if not iconv_dep.found()
+    # With prefer_static Meson searches library directories itself and
+    # doesn't take the macOS SDK's libiconv, a stub (.tbd) for the system's
+    # shared library: link it by name if that works
+    iconv_dep = declare_dependency(link_args: '-liconv')
+    if not cc.has_function('iconv_open', prefix: '#include <iconv.h>',
+                           dependencies: iconv_dep)
+      error('iconv not found')
+    endif
+  endif
   conf.set('HAVE_ICONV', 1)
   iconv_const_test = '''
 #include <stdlib.h>
