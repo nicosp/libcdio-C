@@ -325,7 +325,10 @@ elif system == 'cygwin'
 elif system == 'windows' and is_msvc
   conf.set('HAVE_WINDOWS_H', cc.check_header('windows.h') ? 1 : false)
   conf.set('HAVE_WIN32_CDROM', 1)
-  os_deps += cc.find_library('winmm')
+  # winmm (mciSendCommand() in the ASPI driver) is part of Windows, so link
+  # it without searching: with prefer_static, or static: either way, Meson
+  # searches its compiler's library directories, and MSVC reports none.
+  os_deps += declare_dependency(link_args: '-lwinmm')
   cd_drivers += 'Win32'
   enable_cdda_player_os = false
 elif system == 'windows'
